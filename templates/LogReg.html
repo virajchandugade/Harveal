@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harveal | Welcome</title>
-    <link rel="stylesheet" href="LogRegcss.css">
+    <link rel="stylesheet" href="/static/css/LogRegcss.css">
 </head>
 <body>
     <header>
@@ -25,6 +25,7 @@
                 <input type="text" required placeholder="10 digit Phone number/ enter ID">
             </div>
 
+            <button type="submit" class="getotp-btn">Get OTP</button>
             <div class="input-box">
                 <input type="text" required placeholder="Enter OTP">
             </div>
@@ -41,28 +42,31 @@
 
 
 
-        <form class="Register-form">
+        <form class="Register-form" method="post" action="/register_user/">
             <div class="head-div">
                 <label class="head">Register</label>
             </div>
             <div class="input-box">
-                <input type="text" required placeholder="10 digit Phone number">
+                <input type="text"  id="phone" name="phone" placeholder="10 digit Phone number" required oninput="enableGetOtp()">
             </div>
 
             <div class="input-box">
-                <input type="email" required placeholder="Email (Optional)"> 
+                <input type="email" id="email" name="email" placeholder="Email (Optional)" required oninput="enableGetOtp()"> 
             </div>
 
+            <button id="getOtpBtn" type="button" class="getotp-btn"  disabled onclick="sendOtp()">Get OTP</button>
+
             <div class="input-box">
-                <input type="text" required placeholder="Enter OTP">
+                <input id="otp" name="otp" type="text"  placeholder="Enter OTP" disabled oninput="enableSubmit()">
             </div>
-            <button type="submit" class="submit-btn">Submit</button>
+
+            <button id="submitBtn" type="submit" class="submit-btn" disabled >Submit</button>
             <label class="Login-btn">Alredy have a account? Login</label>
         </form>
         
     </div>
     
-    <script src="LogRegJS.js"></script>
+    <script src="/static/js/LogRegJS.js"></script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

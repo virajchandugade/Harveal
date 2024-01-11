@@ -7,7 +7,7 @@
     font-family: 'Didact Gothic', sans-serif;
 }
 body{
-    background-image: url(crop2.jpg);
+    background-image: url(/static/images/crop2.jpg);
     background-size: cover;
     background-position: 0px -50px;
     display: flex;
@@ -45,7 +45,7 @@ header{
 
 .Form-box{
     width: 400px;
-    height: 400px;
+    height: 430px;
     backdrop-filter: blur(9px);
     color: white;
     font-size: 20px;
@@ -74,7 +74,7 @@ header{
     transform: translateX(-100%);
 }
 .input-box{
-    width: 100%;
+    width: 300px;
     height: 50px;
     margin: 20px 0; 
     padding:0 10px 0;
@@ -131,6 +131,22 @@ header{
     display: flex;
     height:45px;
     width: 80%;
+    padding:0 10px 0;
+    justify-content: center;
+    font-size: 18px;
+    align-items: center;
+    background-color: rgb(13, 202, 76);
+    color: white;
+    border: none;
+    margin-top: 10px;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.getotp-btn{
+    display: flex;
+    height:45px;
+    width: 50%;
     padding:0 10px 0;
     justify-content: center;
     font-size: 18px;
