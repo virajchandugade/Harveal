@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Quicksand:wght@300&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Didact Gothic', sans-serif;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    padding: 20px 3%;
+}
+
+.navlist ul{
+    
+    margin-left: 420px;
+}
+
+
+
+/* .navlist ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+} */
+
+.navlist li{
+    display: inline;
+    padding-right: 10px;
+}

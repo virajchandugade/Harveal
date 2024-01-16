@@ -17,7 +17,7 @@ class OtpRequest(BaseModel):
     email: str
 
 
-
+# http://127.0.0.1:8000/docs.
 uri = "mongodb+srv://harveal:harveal2024@cluster0.25sb0oo.mongodb.net/?retryWrites=true&w=majority"
 
 client = MongoClient(uri, server_api=ServerApi('1'))
