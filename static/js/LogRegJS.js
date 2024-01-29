@@ -37,34 +37,6 @@ function enableSubmit() {
   }
 }
 
-// JavaScript function to simulate getting OTP (replace with your actual logic)
-
-// function getOtp() {
-//   // Simulate getting OTP (replace this with your actual logic to send OTP)
-//   alert('OTP Sent!');
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//   // Enable the OTP input field
-//   document.getElementById('otp').removeAttribute('disabled');
-//   // Enable the Submit button
-//   enableSubmit();
-// }
-
-
-
 
 // JavaScript function to submit the form (replace with your actual form submission logic)
 
@@ -100,3 +72,61 @@ async function sendOtp() {
     console.error('Error sending OTP:', error);
   }
 }
+
+//for login form submit
+function enableLogSubmit() {
+  const logotp = document.getElementById('logOTP').value;
+  const logsubmitBtn = document.getElementById('submitLog-btn');
+
+  if (logotp.trim() !== '') {
+      logsubmitBtn.removeAttribute('disabled');
+  } else {
+      logsubmitBtn.setAttribute('disabled', 'true');
+  }
+}
+//for login form get otp button
+function enableLogotp(){
+  const user_id=document.getElementById('logID').value;
+  const loggetOtpBtn = document.getElementById('getlogotp-btn');
+
+  if (user_id.trim() !== '') {
+      loggetOtpBtn.removeAttribute('disabled');
+  } else {
+      loggetOtpBtn.setAttribute('disabled', 'true');
+  }
+}
+
+//for login form otp sending logic
+async function sendLogOtp() {
+  try {
+    // Get the email value from the input field
+    const uid = document.getElementById('logID').value;
+
+    // Make a fetch request to the /sendotp/ endpoint
+    const logresponse = await fetch('/send_log_otp/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ uid }),
+    });
+
+    // Check if the request was successful
+    if (logresponse.ok) {
+      // If successful, enable the OTP input field
+      // Enable the Submit button
+      
+      alert('OTP Sent!');
+      document.getElementById('logOTP').removeAttribute('disabled');
+      enableLogSubmit();
+    } else {
+      // If not successful, handle the error (e.g., display an error message)
+      console.error('Failed to send OTP:', logresponse.statusText);
+
+    }
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+  }
+}
+
+
