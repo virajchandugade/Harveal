@@ -2,18 +2,24 @@ from fastapi import FastAPI,Form, Request
 from fastapi.staticfiles import StaticFiles
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse,JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
 from pydantic import BaseModel
-from fastapi import Form, Depends,  HTTPException, status
-from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer
-from fastapi_sessions import get_session, Session
+from fastapi import Depends,  HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.security import OAuth2PasswordBearer
+# from fastapi_sessions import get_session, Session
+from gtts import gTTS
+import os
+from translate import Translator
 import secrets
+
+
+
 
 
 class OtpRequest(BaseModel):
@@ -34,6 +40,17 @@ sender_password = "pcla mrfa myju mdtp"
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")  #html files
 app.mount("/static", StaticFiles(directory="static"), name="static")#css and js files 
+
+origins = ["*"]  # Update this with your frontend's actual origin(s)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -179,11 +196,11 @@ Id_user="HARV2024"+str(log_id)
 log_otp_user = secrets.randbelow(90000) + 10000
   
   
-@app.post("/login_user/")
-async def login(logOTP:int=Form(...)):
+@app.post("/login_user/",response_class=HTMLResponse)
+async def login(request: Request,logOTP:int=Form(...)):
     print(logOTP)
     if (logOTP == log_otp_user):
-        return{"login successfully!"}
+         return templates.TemplateResponse("logtest.html", {"request": request})
     else:
         return {"what a waste!"}
     
@@ -202,6 +219,32 @@ async def send_log_otp(lgdata:LogOtpRequest):
       
 def get_user_by_id(uid):
     return db.users.find_one({"HARV_ID": uid})
+
+
+
+
+@app.post("/translate/")
+async def translate_to_marathi(text: str = Form(...)):
+    # Translate the text to Marathi
+    translator = Translator(to_lang="mr")
+    translated_text = translator.translate(text)
+
+    return JSONResponse(content={"translatedText": translated_text})
+
+@app.post("/read_out_loud/")
+async def read_out_loud(text: str = Form(...)):
+    # Create a gTTS object
+    tts = gTTS(text=text, lang="mr")
+
+    # Save the audio file
+    audio_path = "static/audio/output.mp3"
+    tts.save(audio_path)
+
+    # Play the audio file
+    os.system("start " + audio_path)
+
+    return JSONResponse(content={"audio_url": "/static/audio/output.mp3"})
+
 
 
 

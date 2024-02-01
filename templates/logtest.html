@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation and Read Out Loud</title>
+    <link rel="stylesheet" href="/static/css/test.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Translation</h2>
+        <textarea id="textInput" placeholder="Enter text to translate"></textarea>
+        <button onclick="translateText()">Translate</button>
+        <div id="translationResult"></div>
+    </div>
+
+    <div class="container">
+        <h2>Read Out Loud</h2>
+        <textarea id="readOutLoudInput" placeholder="Enter text to read out loud"></textarea>
+        <button onclick="readOutLoud()">Read Out Loud</button>
+    </div>
+
+    <div class="container" id="audioContainer">
+        <!-- Audio element will be dynamically added here -->
+    </div>
+    
+    <script src="/static/js/testingtrans.js"></script>
+</body>
+</html>
