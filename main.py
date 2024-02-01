@@ -9,8 +9,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
 from pydantic import BaseModel
-from fastapi import Form, Depends
+from fastapi import Form, Depends,  HTTPException, status
 from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordBearer
+from fastapi_sessions import get_session, Session
 import secrets
 
 
@@ -141,7 +143,7 @@ def log_send_mail(log_user,log_otp_user):
         server.starttls()
         server.login(sender_email,sender_password)
 
-        server.sendmail(sender_email,log_otp_user,msg.as_string())
+        server.sendmail(sender_email,log_user,msg.as_string())
         server.quit()
         print("email sent successfully!")
                
@@ -194,7 +196,8 @@ async def send_log_otp(lgdata:LogOtpRequest):
     log_ID = get_user_by_id(lgdata.uid)
     print(log_ID)
     print(log_ID["email"])
-    log_send_mail(log_ID["email"], log_otp_user)
+    v=log_ID["email"]
+    log_send_mail(v, log_otp_user)
 
       
 def get_user_by_id(uid):
