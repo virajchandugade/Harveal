@@ -225,7 +225,7 @@ def get_user_by_id(uid):
 
 @app.post("/translate/")
 async def translate_to_marathi(text: str = Form(...)):
-    # Translate the text to Marathi
+    #text to Marathi
     translator = Translator(to_lang="mr")
     translated_text = translator.translate(text)
 
@@ -233,7 +233,7 @@ async def translate_to_marathi(text: str = Form(...)):
 
 @app.post("/read_out_loud/")
 async def read_out_loud(text: str = Form(...)):
-    # Create a gTTS object
+    # gTTS object
     tts = gTTS(text=text, lang="mr")
 
     # Save the audio file

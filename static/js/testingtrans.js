@@ -23,7 +23,7 @@ async function translateText() {
 
 async function readOutLoud() {
     try {
-        const readOutLoudInput = document.getElementById('readOutLoudInput').value;
+        const readOutLoudInput = document.getElementById('translationResult').innerText;
 
         const formData = new FormData();
         formData.append('text', readOutLoudInput);
