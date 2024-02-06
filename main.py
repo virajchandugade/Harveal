@@ -13,6 +13,7 @@ from fastapi import Depends,  HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 # from fastapi.security import OAuth2PasswordBearer
 # from fastapi_sessions import get_session, Session
+from langdetect import detect
 from gtts import gTTS
 import os
 from translate import Translator
@@ -228,13 +229,64 @@ async def translate_to_marathi(text: str = Form(...)):
     #text to Marathi
     translator = Translator(to_lang="mr")
     translated_text = translator.translate(text)
+    
+    
+    chunk_size = 200
+    text_chunks = [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
 
-    return JSONResponse(content={"translatedText": translated_text})
+    # Translate each chunk separately
+    translated_text = ""
+    for chunk in text_chunks:
+        translator = Translator(to_lang="mr")
+        translated_chunk = translator.translate(chunk)
+        translated_text += translated_chunk + " "
+
+    return JSONResponse(content={"translatedText": translated_text.strip()})
+
+    # return JSONResponse(content={"translatedText": translated_text})
+    
+    
+@app.post("/translate_hindi/")
+async def translate_to_hindi(text_h: str = Form(...)):
+    chunk_size = 200
+    text_chunks = [text_h[i:i+chunk_size] for i in range(0, len(text_h), chunk_size)]
+
+    translated_text = ""
+    for chunk in text_chunks:
+        translator = Translator(to_lang="hi")
+        translated_chunk = translator.translate(chunk)
+        translated_text += translated_chunk + " "
+
+    return JSONResponse(content={"translatedText": translated_text.strip()})
+
+# @app.post("/read_out_loud/")
+# async def read_out_loud(text: str = Form(...)):
+#     #gTTS object
+#     tts = gTTS(text=text, lang="hi")
+
+#     #Save the audio file
+#     audio_path = "static/audio/output.mp3"
+#     tts.save(audio_path)
+
+#     #Play the audio file
+#     os.system("start " + audio_path)
+
+#     return JSONResponse(content={"audio_url": "/static/audio/output.mp3"})
+
+
+
+
+
+
+
 
 @app.post("/read_out_loud/")
 async def read_out_loud(text: str = Form(...)):
+    # Detect the language
+    detected_lang = detect(text)
+
     # gTTS object
-    tts = gTTS(text=text, lang="mr")
+    tts = gTTS(text=text, lang=detected_lang)
 
     # Save the audio file
     audio_path = "static/audio/output.mp3"
@@ -244,7 +296,3 @@ async def read_out_loud(text: str = Form(...)):
     os.system("start " + audio_path)
 
     return JSONResponse(content={"audio_url": "/static/audio/output.mp3"})
-
-
-
-

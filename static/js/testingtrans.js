@@ -21,6 +21,29 @@ async function translateText() {
     }
 }
 
+async function translateTexthindi() {
+    try {
+        const textInput= document.getElementById('textInput').value;
+
+        const formData = new FormData();
+        formData.append('text_h', textInput);
+
+        const response = await fetch('/translate_hindi/', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            document.getElementById('translationResult').innerText = `Translated Text: ${result.translatedText}`;
+        } else {
+            console.error('Failed to translate:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error translating text:', error);
+    }
+}
+
 async function readOutLoud() {
     try {
         const readOutLoudInput = document.getElementById('translationResult').innerText;
@@ -50,3 +73,5 @@ async function readOutLoud() {
         console.error('Error reading out loud:', error);
     }
 }
+
+// JavaScript code
