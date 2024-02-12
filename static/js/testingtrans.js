@@ -74,4 +74,51 @@ async function readOutLoud() {
     }
 }
 
-// JavaScript code
+function handleDragOver(event) {
+    event.preventDefault();
+    document.getElementById('drop-area').classList.add('highlight');
+  }
+
+  function handleDragLeave(event) {
+    event.preventDefault();
+    document.getElementById('drop-area').classList.remove('highlight');
+  }
+
+  function handleDrop(event) {
+    event.preventDefault();
+    document.getElementById('drop-area').classList.remove('highlight');
+
+    const files = event.dataTransfer.files;
+
+    if (files.length > 0) {
+      const imageFile = files[0];
+      displayImage(imageFile);
+    }
+  }
+
+  function handleFiles(files) {
+    if (files.length > 0) {
+      const imageFile = files[0];
+      displayImage(imageFile);
+    }
+  }
+
+  function displayImage(file) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const imgElement = document.getElementById('preview-img');
+      imgElement.src = e.target.result;
+      imgElement.alt = file.name;
+      imgElement.style.display = 'block';
+      
+      document.getElementById('drop-area').innerHTML = ''; // Clear previous content
+      document.getElementById('drop-area').appendChild(imgElement);
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  function openFileExplorer() {
+    document.getElementById('file-input').click();
+  }

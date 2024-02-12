@@ -7,8 +7,15 @@
     <link rel="stylesheet" href="/static/css/test.css">
     <script src="https://kit.fontawesome.com/86b53df464.js" crossorigin="anonymous"></script>
 </head>
+<header>dt page</header>
 <body>
-
+    <div class="drop-img-cont">
+        <section class="d_img" id="drop-area" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="openFileExplorer()">
+          <p>Drag &amp; Drop image here</p>
+          <input type="file" id="file-input" onchange="handleFiles(this.files)">
+          <img id="preview-img" style="display: none;">
+        </section>
+      </div>
     <div class="container">
         <h2>Translation</h2>
         <textarea id="textInput" placeholder="Enter text to translate"></textarea>

@@ -6,7 +6,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+   
 }
 
 .container {
@@ -23,3 +23,33 @@ button {
     padding: 10px;
     cursor: pointer;
 }
+
+.drop-img-cont {
+    position: relative;
+  }
+
+  .d_img {
+    height: 80vh;
+    width: 600px;
+    background-color: aqua;
+    border-radius: 5px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .highlight {
+    border: 2px dashed #2196F3;
+  }
+
+  #file-input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  #preview-img {
+    max-width: 400px;
+    max-height: 400px;
+  }

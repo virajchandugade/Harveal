@@ -11,17 +11,14 @@ import random
 from pydantic import BaseModel
 from fastapi import Depends,  HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-# from fastapi.security import OAuth2PasswordBearer
-# from fastapi_sessions import get_session, Session
+from datetime import datetime, timedelta
 from langdetect import detect
 from gtts import gTTS
 import os
 from translate import Translator
 import secrets
-
-
-
-
+from starlette.middleware.sessions import SessionMiddleware
+from fastapi.security import OAuth2PasswordBearer
 
 class OtpRequest(BaseModel):
     email: str
@@ -49,8 +46,23 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
+    
 )
+SECRET_KEY = "your_secret_key"
+
+# Session timeout in minutes
+SESSION_TIMEOUT_MINUTES = 30
+
+app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+def get_current_user(session: dict = Depends(lambda s: s.session)):
+    user_id = session.get("user_id")
+    if user_id not in collection:
+        return None
+    return collection[user_id]
 
 
 
@@ -169,8 +181,11 @@ def log_send_mail(log_user,log_otp_user):
         return f"An error occurred: {str(e)}"
     
     
+log_id=random.randint(100000,999999) 
+Id_user="HARV2024"+str(log_id)
 
 
+#new user-------------------------------------------------------------------------------------
 @app.post("/register_user/")
 async def register(phone: str = Form(...), email: str = Form(...),otp:int=Form(...)):
     # Insert the received data into MongoDB
@@ -179,36 +194,39 @@ async def register(phone: str = Form(...), email: str = Form(...),otp:int=Form(.
         "email":email,
         "HARV_ID":Id_user
     }       
-    if (otp != otp_user):
+    find=db.users.find_one({"email": email})
+    print(find)
+    if (email==find):
+        return {"user already exist"} 
+    elif (otp != otp_user):
         return{"incorrect otp"}
     else:
         collection.insert_one(user_data)
-        return {"message": "Data stored successfully!"}
-
-    
-#logic for id generation
-
-log_id=random.randint(100000,999999) 
-Id_user="HARV2024"+str(log_id)
- 
- 
- 
-
-log_otp_user = secrets.randbelow(90000) + 10000
   
-  
-@app.post("/login_user/",response_class=HTMLResponse)
-async def login(request: Request,logOTP:int=Form(...)):
-    print(logOTP)
-    if (logOTP == log_otp_user):
-         return templates.TemplateResponse("logtest.html", {"request": request})
-    else:
-        return {"what a waste!"}
-    
+    # Store the session ID in a cookie
+        return RedirectResponse(url="/mainpg/")
+
    
+#------------------------------------------------------------------------   
+log_otp_user = secrets.randbelow(90000) + 10000  #logic for id generation
+
+#for regesistered user(login)
+@app.post("/login_user/",response_class=HTMLResponse)
+async def login(request: Request,logID:str=Form(...),logOTP:int=Form(...)):
+    print(logOTP)
+    print(logID)
+    if (logOTP == log_otp_user):
+        session_id = str(datetime.utcnow().timestamp())
+        request.session["user_id"] = logID
+        response = templates.TemplateResponse("logtest.html", {"request": request})
+        response.set_cookie(key="session_id", value=session_id, expires=timedelta(minutes=SESSION_TIMEOUT_MINUTES))
+        return templates.TemplateResponse("logtest.html", {"request": request})
+    else:
+        return {"what a waste!"}  
+    
+
 class LogOtpRequest(BaseModel):
     uid: str
- 
 @app.post("/send_log_otp/") 
 async def send_log_otp(lgdata:LogOtpRequest):
     log_ID = get_user_by_id(lgdata.uid)
@@ -216,21 +234,16 @@ async def send_log_otp(lgdata:LogOtpRequest):
     print(log_ID["email"])
     v=log_ID["email"]
     log_send_mail(v, log_otp_user)
-
-      
+     
 def get_user_by_id(uid):
     return db.users.find_one({"HARV_ID": uid})
-
-
-
-
+#-------------------------------------------------------------------------
+#for translation in marathi
 @app.post("/translate/")
 async def translate_to_marathi(text: str = Form(...)):
     #text to Marathi
     translator = Translator(to_lang="mr")
     translated_text = translator.translate(text)
-    
-    
     chunk_size = 200
     text_chunks = [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
 
@@ -245,7 +258,8 @@ async def translate_to_marathi(text: str = Form(...)):
 
     # return JSONResponse(content={"translatedText": translated_text})
     
-    
+   #for translation in marathi 
+#for translation in hindi
 @app.post("/translate_hindi/")
 async def translate_to_hindi(text_h: str = Form(...)):
     chunk_size = 200
@@ -259,27 +273,8 @@ async def translate_to_hindi(text_h: str = Form(...)):
 
     return JSONResponse(content={"translatedText": translated_text.strip()})
 
-# @app.post("/read_out_loud/")
-# async def read_out_loud(text: str = Form(...)):
-#     #gTTS object
-#     tts = gTTS(text=text, lang="hi")
 
-#     #Save the audio file
-#     audio_path = "static/audio/output.mp3"
-#     tts.save(audio_path)
-
-#     #Play the audio file
-#     os.system("start " + audio_path)
-
-#     return JSONResponse(content={"audio_url": "/static/audio/output.mp3"})
-
-
-
-
-
-
-
-
+#read out loud feature
 @app.post("/read_out_loud/")
 async def read_out_loud(text: str = Form(...)):
     # Detect the language
@@ -296,3 +291,20 @@ async def read_out_loud(text: str = Form(...)):
     os.system("start " + audio_path)
 
     return JSONResponse(content={"audio_url": "/static/audio/output.mp3"})
+
+@app.get("/protected")
+async def protected_route(current_user: dict = Depends(get_current_user)):
+    if current_user:
+        return {"message": "This is a protected route", "user": current_user}
+    else:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+
+
+@app.post("/logout", response_class=HTMLResponse)
+async def logout(request: Request, response: JSONResponse):
+    response.delete_cookie(key="session_id")
+    request.session.clear()
+    response = RedirectResponse(url="/")
+    return response
+

@@ -1,15 +1,10 @@
 
-from translate import Translator
+import secrets
 
-def translate_text(text, target_language='mr'):
-    translator = Translator(to_lang=target_language)
-    translated_text = translator.translate(text)
-    return translated_text
+# Generate a secure random key with 32 bytes (256 bits)
+session_secret = secrets.token_bytes(32)
 
-# Example usage
-english_text = "Hello, how are you?"
-translated_text = translate_text(english_text, target_language='hi')
-print(translated_text)
+print(session_secret.hex())
 
 
 
