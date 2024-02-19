@@ -74,51 +74,69 @@ async function readOutLoud() {
     }
 }
 
-function handleDragOver(event) {
+//------------------------------drag and drop------------------------------------------------------------------
+const droparea=document.getElementById('drop-area');
+const inputfile=document.getElementById('input-file');
+const imgview=document.getElementById('imgview');
+
+inputfile.addEventListener("change",uploadimage)
+
+function uploadimage(){
+    
+    let imglink=URL.createObjectURL(inputfile.files[0]);
+    imgview.style.backgroundImage=`url( ${imglink})`; 
+    imgview.textContent="";
+}
+
+droparea.addEventListener( "dragover", function( event ){
     event.preventDefault();
-    document.getElementById('drop-area').classList.add('highlight');
-  }
+});
 
-  function handleDragLeave(event) {
+droparea.addEventListener( "drop", function( event ){
     event.preventDefault();
-    document.getElementById('drop-area').classList.remove('highlight');
-  }
+    inputfile.files=event.dataTransfer.files;
+    uploadimage();
+});
 
-  function handleDrop(event) {
-    event.preventDefault();
-    document.getElementById('drop-area').classList.remove('highlight');
 
-    const files = event.dataTransfer.files;
+//prediction request---------------------------------------------------------------------------------------------------
 
-    if (files.length > 0) {
-      const imageFile = files[0];
-      displayImage(imageFile);
+  async function detectDisease() {
+    // Disable the button during detection
+    document.getElementById('detect_disease').disabled = true;
+
+    // Disable the textarea during detection
+    document.getElementById('textInput').disabled = true;
+
+    // Get the file input
+    const fileInput = document.getElementById('input-file');
+    const file = fileInput.files[0];
+
+    // Prepare the data to send to the FastAPI endpoint
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        // Make an asynchronous request to the FastAPI endpoint
+        const response = await fetch('/predmod/', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            // Parse the JSON response
+            const result = await response.json();
+
+            // Display the result in the textarea
+            document.getElementById('textInput').value = result.result;
+        } else {
+            console.error('Failed to get prediction result');
+        }
+    } catch (error) {
+        console.error('An error occurred during detection:', error);
+    } finally {
+        // Enable the button and textarea after detection is complete
+        document.getElementById('detect_disease').disabled = false;
+        document.getElementById('textInput').disabled = false;
     }
-  }
-
-  function handleFiles(files) {
-    if (files.length > 0) {
-      const imageFile = files[0];
-      displayImage(imageFile);
-    }
-  }
-
-  function displayImage(file) {
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-      const imgElement = document.getElementById('preview-img');
-      imgElement.src = e.target.result;
-      imgElement.alt = file.name;
-      imgElement.style.display = 'block';
-      
-      document.getElementById('drop-area').innerHTML = ''; // Clear previous content
-      document.getElementById('drop-area').appendChild(imgElement);
-    };
-
-    reader.readAsDataURL(file);
-  }
-
-  function openFileExplorer() {
-    document.getElementById('file-input').click();
-  }
+}

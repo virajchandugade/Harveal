@@ -1,4 +1,7 @@
-from fastapi import FastAPI,Form, Request
+'''-------------------------------------------------HARVEAL----------------------------------------------------------'''
+''' IMPORTS ||
+            \/ '''
+from fastapi import FastAPI,Form, Request,UploadFile,File
 from fastapi.staticfiles import StaticFiles
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -19,22 +22,33 @@ from translate import Translator
 import secrets
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.security import OAuth2PasswordBearer
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
+import numpy as np
+#-----------------------------------------------------------------------------------------------------------------------
+#loading tomato madel---------------------------------------------------------------------------------------------------
 
+mod='mymod.h5'
+loaded_model = load_model(mod)
+
+#-----------------------------------------------------------------------------------------------------------------------
 class OtpRequest(BaseModel):
     email: str
-    
 
-
+#----------------------------------------------------database-----------------------------------------------------------
 # http://127.0.0.1:8000/docs.
 uri = "mongodb+srv://harveal:harveal2024@cluster0.25sb0oo.mongodb.net/?retryWrites=true&w=majority"
 
 client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["harveal"]
 collection = db["users"]
+dis_col=db['disease']
+#----------------------------------------------------database-----------------------------------------------------------
 
+#-------------email-----------------------------------
 sender_email = "harvealsup628@gmail.com"
 sender_password = "pcla mrfa myju mdtp"
-    
+#-------------email-----------------------------------
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")  #html files
 app.mount("/static", StaticFiles(directory="static"), name="static")#css and js files 
@@ -49,7 +63,7 @@ app.add_middleware(
     allow_headers=["*"]
     
 )
-SECRET_KEY = "your_secret_key"
+SECRET_KEY = "harveal_45512"
 
 # Session timeout in minutes
 SESSION_TIMEOUT_MINUTES = 30
@@ -185,7 +199,7 @@ log_id=random.randint(100000,999999)
 Id_user="HARV2024"+str(log_id)
 
 
-#new user-------------------------------------------------------------------------------------
+#new user---------------------------------------------------------------------------------------------------------------
 @app.post("/register_user/")
 async def register(phone: str = Form(...), email: str = Form(...),otp:int=Form(...)):
     # Insert the received data into MongoDB
@@ -207,7 +221,7 @@ async def register(phone: str = Form(...), email: str = Form(...),otp:int=Form(.
         return RedirectResponse(url="/mainpg/")
 
    
-#------------------------------------------------------------------------   
+#----------------------------------------------------------------------------------------------------------------------   
 log_otp_user = secrets.randbelow(90000) + 10000  #logic for id generation
 
 #for regesistered user(login)
@@ -237,7 +251,7 @@ async def send_log_otp(lgdata:LogOtpRequest):
      
 def get_user_by_id(uid):
     return db.users.find_one({"HARV_ID": uid})
-#-------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------
 #for translation in marathi
 @app.post("/translate/")
 async def translate_to_marathi(text: str = Form(...)):
@@ -273,11 +287,11 @@ async def translate_to_hindi(text_h: str = Form(...)):
 
     return JSONResponse(content={"translatedText": translated_text.strip()})
 
-
+#-----------------------------------------------------------------------------------------------------------------------
 #read out loud feature
 @app.post("/read_out_loud/")
 async def read_out_loud(text: str = Form(...)):
-    # Detect the language
+
     detected_lang = detect(text)
 
     # gTTS object
@@ -300,7 +314,8 @@ async def protected_route(current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=401, detail="Not authenticated")
 
 
-
+#-----------------------------------------------------------------------------------------------------------------------
+#logout endpoint
 @app.post("/logout", response_class=HTMLResponse)
 async def logout(request: Request, response: JSONResponse):
     response.delete_cookie(key="session_id")
@@ -308,3 +323,33 @@ async def logout(request: Request, response: JSONResponse):
     response = RedirectResponse(url="/")
     return response
 
+#-----------------------------------------------------------------------------------------------------------------------
+#prediction of model
+@app.post("/predmod/")
+async def prediction(file: UploadFile=File(...)):
+    with  open(f'uploads/{file.filename}', 'wb+') as imgfile:
+        imgfile.write(file.file.read())
+        
+    image_path = f'uploads/{file.filename}'
+    new_image = image.load_img(image_path, target_size=(64, 64))
+    new_image_array = image.img_to_array(new_image)
+    new_image_array = np.expand_dims(new_image_array, axis=0)
+    new_image_array /= 255.0
+    prediction = loaded_model.predict(new_image_array)
+
+
+    class_labels = ['healthy_leaf', 'target_spot', 'ToMV']
+    predicted_class_index = np.argmax(prediction)
+    predicted_class = class_labels[predicted_class_index]
+    
+    
+    detc_disease=dis_col.find_one({'d_id': predicted_class})
+    result=detc_disease['d_desc']
+    confid=prediction.squeeze()
+    
+    
+
+    print(f"The predicted class is: {predicted_class}")
+    print(f"Confidence scores: {prediction.squeeze()}")
+        
+    return JSONResponse(content={"result": result, "confidence": confid.tolist()})

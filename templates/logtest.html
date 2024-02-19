@@ -9,24 +9,30 @@
 </head>
 <header>dt page</header>
 <body>
+
     <div class="drop-img-cont">
-        <section class="d_img" id="drop-area" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="openFileExplorer()">
+        <section class="d_img" id="drop-area">
           <p>Drag &amp; Drop image here</p>
-          <input type="file" id="file-input" onchange="handleFiles(this.files)">
-          <img id="preview-img" style="display: none;">
+          <input type="file" id="input-file" accept="image/*" > 
+        <div class="imgview" id="imgview">
+        </div>
         </section>
-      </div>
+    </div>
+
     <div class="container">
+        <button id="detect_disease" onclick="detectDisease()"> detect </button>
+
         <h2>Translation</h2>
-        <textarea id="textInput" placeholder="Enter text to translate"></textarea>
+        <textarea id="textInput" placeholder="Enter text to translate">
+            {{result}}
+            {{confid}}
+        </textarea>
         <button onclick="translateText()">Marathi</button>
         <button onclick="translateTexthindi()">Hindi</button>
         <div id="translationResult"></div>
 
          <h2>Read Out Loud</h2>
-       
         <button onclick="readOutLoud()"><i class="fa-solid fa-headphones-simple"></i></button>
-
     </div>
 
  
