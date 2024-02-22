@@ -28,7 +28,7 @@ import numpy as np
 #-----------------------------------------------------------------------------------------------------------------------
 #loading tomato madel---------------------------------------------------------------------------------------------------
 
-mod='mymod.h5'
+mod='tomato_model.keras'
 loaded_model = load_model(mod)
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -43,12 +43,14 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["harveal"]
 collection = db["users"]
 dis_col=db['disease']
-#----------------------------------------------------database-----------------------------------------------------------
+#----------------------------------------------------database-------------------------------------------------------------
 
-#-------------email-----------------------------------
+#-------------------------------------------------------email-----------------------------------------------------------------
+
 sender_email = "harvealsup628@gmail.com"
 sender_password = "pcla mrfa myju mdtp"
-#-------------email-----------------------------------
+
+#-------------------------------------------------------email-----------------------------------------------------------------
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")  #html files
 app.mount("/static", StaticFiles(directory="static"), name="static")#css and js files 
@@ -86,7 +88,7 @@ async def read_root(request: Request):
 
 
 
-# Generate a random 5-digit OTP
+
 otp_user = random.randint(10000, 99999)
 
 @app.post("/sendotp/")
@@ -232,9 +234,9 @@ async def login(request: Request,logID:str=Form(...),logOTP:int=Form(...)):
     if (logOTP == log_otp_user):
         session_id = str(datetime.utcnow().timestamp())
         request.session["user_id"] = logID
-        response = templates.TemplateResponse("logtest.html", {"request": request})
+        response = templates.TemplateResponse("mainP.html", {"request": request})
         response.set_cookie(key="session_id", value=session_id, expires=timedelta(minutes=SESSION_TIMEOUT_MINUTES))
-        return templates.TemplateResponse("logtest.html", {"request": request})
+        return templates.TemplateResponse("mainP.html", {"request": request})
     else:
         return {"what a waste!"}  
     
@@ -270,9 +272,9 @@ async def translate_to_marathi(text: str = Form(...)):
 
     return JSONResponse(content={"translatedText": translated_text.strip()})
 
-    # return JSONResponse(content={"translatedText": translated_text})
+#return JSONResponse(content={"translatedText": translated_text})
     
-   #for translation in marathi 
+#for translation in marathi 
 #for translation in hindi
 @app.post("/translate_hindi/")
 async def translate_to_hindi(text_h: str = Form(...)):
@@ -316,7 +318,7 @@ async def protected_route(current_user: dict = Depends(get_current_user)):
 
 #-----------------------------------------------------------------------------------------------------------------------
 #logout endpoint
-@app.post("/logout", response_class=HTMLResponse)
+@app.post("/logout/", response_class=HTMLResponse)
 async def logout(request: Request, response: JSONResponse):
     response.delete_cookie(key="session_id")
     request.session.clear()
@@ -338,7 +340,7 @@ async def prediction(file: UploadFile=File(...)):
     prediction = loaded_model.predict(new_image_array)
 
 
-    class_labels = ['healthy_leaf', 'target_spot', 'ToMV']
+    class_labels =  ['Bacspot','Eblight','LateB','LeafM','septLeaf','SpidM','TargSpot','YellowLeaf','ToMV','Hlty']
     predicted_class_index = np.argmax(prediction)
     predicted_class = class_labels[predicted_class_index]
     
