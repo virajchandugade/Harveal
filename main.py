@@ -287,7 +287,7 @@ async def translate_to_hindi(text_h: str = Form(...)):
         translated_chunk = translator.translate(chunk)
         translated_text += translated_chunk + " "
 
-    return JSONResponse(content={"translatedText": translated_text.strip()})
+    return JSONResponse(content={"-":translated_text.strip()})
 
 #-----------------------------------------------------------------------------------------------------------------------
 #read out loud feature
@@ -340,7 +340,7 @@ async def prediction(file: UploadFile=File(...)):
     prediction = loaded_model.predict(new_image_array)
 
 
-    class_labels =  ['Bacspot','Eblight','LateB','LeafM','septLeaf','SpidM','TargSpot','YellowLeaf','ToMV','Hlty']
+    class_labels =  ['Bacspot','Eblight','LateB','LeafM','septLeaf','SpidM','TarSpot','YellowLeaf','ToMV','Hlty']
     predicted_class_index = np.argmax(prediction)
     predicted_class = class_labels[predicted_class_index]
     
@@ -355,3 +355,8 @@ async def prediction(file: UploadFile=File(...)):
     print(f"Confidence scores: {prediction.squeeze()}")
         
     return JSONResponse(content={"result": result, "confidence": confid.tolist()})
+
+@app.get("/header/", response_class=HTMLResponse)
+async def render_header(request: Request):
+    return templates.TemplateResponse("header.html", {"request": request})
+

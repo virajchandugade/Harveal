@@ -1,0 +1,185 @@
+body {
+  background-image: url(/static/images/tom.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 0px -50px;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.textInput {
+  color: rgb(2, 2, 2);
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  text-align: justify;
+  line-height: 1.6;
+}
+
+.translationResult{
+  color: rgb(2, 2, 2);
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  text-align: justify;
+  line-height: 1.6;
+}
+
+.detect_disease
+ {
+  width: 150px;
+  height: 45px;
+  padding: 0 10px;
+  margin: 10px 5px;
+  font-size: 18px;
+  background-color: rgb(13, 202, 76);
+  color: white;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.lang-marathi,
+.lang-hindi {
+  width: auto;
+  height: 45px;
+  padding: 0 10px;
+  font-size: 18px;
+  background-color: rgb(13, 202, 76);
+  color: white;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  margin: 10px 5px; /* Reduce margin between Marathi and Hindi buttons */
+}
+
+
+
+
+.translation {
+  width: 50%;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.drop-img-cont {
+  position: relative;
+}
+
+.d_img {
+  height: 80vh;
+  width: 600px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 20px auto; /* Center the d_img */
+}
+
+/* height: 300px;
+width: 300px;
+background-color: #f0f0f0;
+border: 2px dashed #ccc;
+border-radius: 10px;
+display: flex;
+justify-content: center; 
+align-items: center; 
+text-align: center;
+overflow: hidden; */
+
+#imgview img {
+  max-width: 100%; /* Ensure the image does not exceed the container width */
+  max-height: 100%; /* Ensure the image does not exceed the container height */
+  object-fit: cover; /* Cover the container with the image */
+}
+#input-file {
+  display: none; /* Hide the file input */
+}
+.highlight {
+  border: 2px dashed #2196F3;
+}
+
+#file-input {
+  position: absolute;
+  opacity: 0;
+}
+
+#preview-img {
+  max-width: 400px;
+  max-height: 400px;
+}
+
+.read {
+  width: 150px;
+  height: 45px;
+  padding: 0 10px;
+  margin-top: 10px; /* Adjust margin top for proper alignment */
+  font-size: 18px;
+  background-color: rgb(13, 202, 76);
+  color: white;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.reading {
+  display: flex;
+  flex-direction: column; /* Arrange items vertically */
+  align-items: center; /* Center items horizontally */
+}
+
+.readH {
+  margin-bottom: 10px; /* Add space between label and button */
+  color: white; /* Set text color to white */
+}
+
+#audioContainer audio {
+  width: 100%; /* Set width to fill the container */
+  height: auto; /* Allow height to adjust based on content */
+  margin-top: 10px; /* Add margin for spacing */
+}
+
+#audioContainer audio::-webkit-media-controls-panel {
+  background-color: #333; /* Background color for control panel */
+  border-radius: 5px; /* Border radius for control panel */
+  padding: 10px; /* Padding for control panel */
+}
+
+#audioContainer audio::-webkit-media-controls-play-button,
+#audioContainer audio::-webkit-media-controls-mute-button {
+  background-color: #fff; /* Background color for play and mute buttons */
+  color: #333; /* Text color for play and mute buttons */
+  border-radius: 50%; /* Make the buttons circular */
+  padding: 5px; /* Padding for play and mute buttons */
+  margin-right: 10px; /* Add spacing between buttons */
+}
+
+#audioContainer audio::-webkit-media-controls-timeline {
+  background-color: #ddd; /* Background color for timeline */
+}
+
+#audioContainer audio::-webkit-media-controls-timeline-container {
+  height: 5px; /* Height of the timeline */
+}
+
+.drop-img-cont {
+  position: relative;
+}
+

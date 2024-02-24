@@ -3,43 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Translation and Read Out Loud</title>
-    <link rel="stylesheet" href="/static/css/test.css">
+    <title>Harveal | disease detection</title>
+    <link rel="stylesheet" href="/static/css/mainPcss.css">
     <script src="https://kit.fontawesome.com/86b53df464.js" crossorigin="anonymous"></script>
 </head>
+<iframe src="/header/" frameborder="0" width="100%" height="100%"></iframe>
 <body>
-    <iframe src="header.html" frameborder="0" width="100%" height="100%"></iframe>
     <div class="drop-img-cont">
-        <section class="d_img" id="drop-area">
-          <p>Drag &amp; Drop image here</p>
-          <input type="file" id="input-file" accept="image/*" > 
-        <div class="imgview" id="imgview">
-        </div>
+        <section class="d_img" id="drop-area" onclick="uploadImage()" ondragover="allowDrop(event)" ondrop="handleDrop(event)">
+            <p>Click here or drag & drop image</p>
+            <input type="file" id="input-file" accept="image/*" onchange="handleFileInput(event)">
+            <div id="imgview"></div>
         </section>
     </div>
 
     <div class="container">
-        <button id="detect_disease" onclick="detectDisease()"> detect </button>
 
-        <h2>Translation</h2>
-        <textarea id="textInput" placeholder="Enter text to translate">
-            {{result}}
-            {{confid}}
-        </textarea>
-        <button onclick="translateText()">Marathi</button>
-        <button onclick="translateTexthindi()">Hindi</button>
-        <div id="translationResult"></div>
+        <button id="detect_disease" class="detect_disease" onclick="detectDisease()"> detect </button>
+        <div class="result_box" id="result_box">
+            <label class="result">Result</label>
+            <div id="textInput" class="textInput">{{result}}</div>    
+        </div>
+        
+        <div class="translation">  
+            <button class="lang-marathi" onclick="translateText()">Marathi</button>
+            <button class="lang-hindi" onclick="translateTexthindi()">Hindi</button>
+            <div id="translationResult" class="translationResult"></div>
+        </div>
+       
+        <div class="reading">
+            <label class="readH">Cick here, to Read Out Loud</label>
+            <button class="read" onclick="readOutLoud()"><i class="fa-solid fa-headphones-simple"></i></button>
+        </div>
 
-         <h2>Read Out Loud</h2>
-        <button onclick="readOutLoud()"><i class="fa-solid fa-headphones-simple"></i></button>
     </div>
 
  
        
 
     <div class="container" id="audioContainer">
-        <!-- Audio element will be dynamically added here -->
+        
     </div>
+
     
     <script src="/static/js/testingtrans.js"></script>
 </body>

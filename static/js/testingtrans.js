@@ -1,6 +1,6 @@
 async function translateText() {
     try {
-        const textInput = document.getElementById('textInput').value;
+        const textInput = document.getElementById('textInput').innerHTML  ;
 
         const formData = new FormData();
         formData.append('text', textInput);
@@ -23,7 +23,7 @@ async function translateText() {
 
 async function translateTexthindi() {
     try {
-        const textInput= document.getElementById('textInput').value;
+        const textInput= document.getElementById('textInput').innerHTML  ;
 
         const formData = new FormData();
         formData.append('text_h', textInput);
@@ -75,38 +75,50 @@ async function readOutLoud() {
 }
 
 //------------------------------drag and drop------------------------------------------------------------------
-const droparea=document.getElementById('drop-area');
-const inputfile=document.getElementById('input-file');
-const imgview=document.getElementById('imgview');
-
-inputfile.addEventListener("change",uploadimage)
-
-function uploadimage(){
-    
-    let imglink=URL.createObjectURL(inputfile.files[0]);
-    imgview.style.backgroundImage=`url( ${imglink})`; 
-    imgview.textContent="";
+// Add event listeners for drag and drop
+function handleFileInput(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            document.getElementById('imgview').innerHTML = ''; // Clear previous image
+            document.getElementById('imgview').appendChild(img); // Display new image
+        };
+        reader.readAsDataURL(file);
+    }
 }
 
-droparea.addEventListener( "dragover", function( event ){
-    event.preventDefault();
-});
+function uploadImage() {
+    document.getElementById('input-file').click(); // Trigger click event on file input
+}
 
-droparea.addEventListener( "drop", function( event ){
+function allowDrop(event) {
     event.preventDefault();
-    inputfile.files=event.dataTransfer.files;
-    uploadimage();
-});
+}
+
+function handleDrop(event) {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            document.getElementById('imgview').innerHTML = ''; // Clear previous image
+            document.getElementById('imgview').appendChild(img); // Display new image
+        };
+        reader.readAsDataURL(file);
+    }
+}
 
 
 //prediction request---------------------------------------------------------------------------------------------------
 
-  async function detectDisease() {
+async function detectDisease() {
     // Disable the button during detection
     document.getElementById('detect_disease').disabled = true;
-
-    // Disable the textarea during detection
-    document.getElementById('textInput').disabled = true;
 
     // Get the file input
     const fileInput = document.getElementById('input-file');
@@ -127,16 +139,16 @@ droparea.addEventListener( "drop", function( event ){
             // Parse the JSON response
             const result = await response.json();
 
-            // Display the result in the textarea
-            document.getElementById('textInput').value = result.result;
+            // Display the result in the section
+            document.getElementById('textInput').innerText  = result.result;
+            console.log("success",result.result);
         } else {
             console.error('Failed to get prediction result');
         }
     } catch (error) {
         console.error('An error occurred during detection:', error);
     } finally {
-        // Enable the button and textarea after detection is complete
+        // Enable the button after detection is complete
         document.getElementById('detect_disease').disabled = false;
-        document.getElementById('textInput').disabled = false;
     }
 }

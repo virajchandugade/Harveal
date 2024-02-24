@@ -27,7 +27,7 @@ a.logo{
     font-family: 'kumbh sans';
     font-size: 44px;
     cursor: pointer;
-    margin-left: -50px;
+    margin-left: 30px;
 }
 
 
@@ -35,7 +35,7 @@ a.logo{
 
 li,a,button {
 font-weight: 500;
-font-size: 16px;
+font-size: 20px;
 text-decoration: none;
 }
 
@@ -46,13 +46,12 @@ header{
     padding: 20px 3%;
 }
 
-.logimg{
+/* .logimg{
      margin-left: 18px;
-    /* padding-top: 5px;  */
     width: 65px;
     height: 70px;
     margin-top: 10px;
-}
+} */
 
 .nav-links{
     list-style:none;
@@ -60,7 +59,7 @@ header{
 
 .nav-links li{
 display: inline-block;
-padding: 0px 20px;
+padding: 0px 35px;
 }
 
 .nav-links li a{
