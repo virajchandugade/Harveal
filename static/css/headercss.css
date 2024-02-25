@@ -9,7 +9,7 @@
 }
 
 body{
-    background-color:rgb(255, 255, 255);
+    background-color:rgb(13, 202, 76);
 }
 
 header{
@@ -43,7 +43,7 @@ header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 3%;
+    padding: 40px 3%;
 }
 
 /* .logimg{

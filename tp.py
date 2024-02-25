@@ -1,10 +1,26 @@
+# import module
+from geopy.geocoders import Nominatim
+import json
+from urllib.request import urlopen
 
-import secrets
+url='http//ipinfo.io/json'
+response=urlopen(url)
 
-# Generate a secure random key with 32 bytes (256 bits)
-session_secret = secrets.token_bytes(32)
+data=json.load(response)
+# address = location.raw['address']
+# print(address)
 
-print(session_secret.hex())
+
+# city = address.get('city', '')
+# state = address.get('state', '')
+# country = address.get('country', '')
+# code = address.get('country_code')
+# zipcode = address.get('postcode')
+# print('City : ',city)
+# print('State : ',state)
+# print('Country : ',country)
+# print('Zip Code : ', zipcode)
+
 
 
 

@@ -355,8 +355,16 @@ async def prediction(file: UploadFile=File(...)):
     print(f"Confidence scores: {prediction.squeeze()}")
         
     return JSONResponse(content={"result": result, "confidence": confid.tolist()})
-
+#-----------------------------header.html------------------------------------------------------------------
 @app.get("/header/", response_class=HTMLResponse)
 async def render_header(request: Request):
     return templates.TemplateResponse("header.html", {"request": request})
+#---------------------------appointment----------------------------------------------------------------------
+@app.get("/appointment/", response_class=HTMLResponse)
+async def appointment(request: Request):
+    return templates.TemplateResponse("appoint.html", {"request": request})
 
+#----------------------------------------mainpage--------------dignose------------------------------------
+@app.get("/diagnose/", response_class=HTMLResponse)
+async def appointment(request: Request):
+    return templates.TemplateResponse("mainP.html", {"request": request})
