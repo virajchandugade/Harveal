@@ -1,6 +1,6 @@
 async function translateText() {
     try {
-        const textInput = document.getElementById('textInput').innerHTML  ;
+        const textInput = document.getElementById('textInput').innerText  ;
 
         const formData = new FormData();
         formData.append('text', textInput);
@@ -12,7 +12,11 @@ async function translateText() {
 
         if (response.ok) {
             const result = await response.json();
-            document.getElementById('translationResult').innerText = `Translated Text: ${result.translatedText}`;
+
+            const formattedText = result.translatedText.replace(/<br>/g, '\n');
+
+            document.getElementById('translationResult').innerText = `Translated Text: ${formattedText}`;
+            // document.getElementById('translationResult').innerText = `Translated Text: ${result.translatedText}`;
         } else {
             console.error('Failed to translate:', response.statusText);
         }

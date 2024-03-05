@@ -22,13 +22,23 @@
         <button id="detect_disease" class="detect_disease" onclick="detectDisease()"> detect </button>
         <div class="result_box" id="result_box">
             <label class="result">Result</label>
-            <div id="textInput" class="textInput">{{result}}</div>    
+            <div id="textInput" class="textInput">
+                <pre>
+                   {{result}} 
+                </pre>
+                
+            </div>    
         </div>
         
         <div class="translation">  
             <button class="lang-marathi" onclick="translateText()">Marathi</button>
             <button class="lang-hindi" onclick="translateTexthindi()">Hindi</button>
-            <div id="translationResult" class="translationResult"></div>
+            
+            <div id="translationResultr" class="translationResult">
+                <p id="translationResult">
+
+                </p>
+            </div>
         </div>
        
         <div class="reading">

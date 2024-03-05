@@ -257,7 +257,7 @@ def get_user_by_id(uid):
 #for translation in marathi
 @app.post("/translate/")
 async def translate_to_marathi(text: str = Form(...)):
-    #text to Marathi
+    # text to Marathi
     translator = Translator(to_lang="mr")
     translated_text = translator.translate(text)
     chunk_size = 200
@@ -268,9 +268,13 @@ async def translate_to_marathi(text: str = Form(...)):
     for chunk in text_chunks:
         translator = Translator(to_lang="mr")
         translated_chunk = translator.translate(chunk)
-        translated_text += translated_chunk + " "
+        translated_text += translated_chunk 
+        translated_text.replace('br', '\n')
 
     return JSONResponse(content={"translatedText": translated_text.strip()})
+   
+
+
 
 #return JSONResponse(content={"translatedText": translated_text})
     
@@ -287,7 +291,7 @@ async def translate_to_hindi(text_h: str = Form(...)):
         translated_chunk = translator.translate(chunk)
         translated_text += translated_chunk + " "
 
-    return JSONResponse(content={"-":translated_text.strip()})
+    return JSONResponse(content={"translatedText":translated_text.strip()})
 
 #-----------------------------------------------------------------------------------------------------------------------
 #read out loud feature
@@ -296,7 +300,6 @@ async def read_out_loud(text: str = Form(...)):
 
     detected_lang = detect(text)
 
-    # gTTS object
     tts = gTTS(text=text, lang=detected_lang)
 
     # Save the audio file
@@ -347,6 +350,7 @@ async def prediction(file: UploadFile=File(...)):
     
     detc_disease=dis_col.find_one({'d_id': predicted_class})
     result=detc_disease['d_desc']
+    
     confid=prediction.squeeze()
     
     
@@ -368,3 +372,4 @@ async def appointment(request: Request):
 @app.get("/diagnose/", response_class=HTMLResponse)
 async def appointment(request: Request):
     return templates.TemplateResponse("mainP.html", {"request": request})
+
