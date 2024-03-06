@@ -343,7 +343,7 @@ async def prediction(file: UploadFile=File(...)):
     prediction = loaded_model.predict(new_image_array)
 
 
-    class_labels =  ['Bacspot','Eblight','LateB','LeafM','septLeaf','SpidM','TarSpot','YellowLeaf','ToMV','Hlty']
+    class_labels = ['Bacspot','Eblight','LateB','LeafM','septLeaf','SpidM','TarSpot','YellowLeaf','ToMV','Hlty']
     predicted_class_index = np.argmax(prediction)
     predicted_class = class_labels[predicted_class_index]
     
