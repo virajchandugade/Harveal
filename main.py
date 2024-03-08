@@ -25,6 +25,7 @@ from fastapi.security import OAuth2PasswordBearer
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
+from pydantic import BaseModel, ValidationError, validator
 #-----------------------------------------------------------------------------------------------------------------------
 #loading tomato madel---------------------------------------------------------------------------------------------------
 
@@ -34,7 +35,27 @@ loaded_model = load_model(mod)
 #-----------------------------------------------------------------------------------------------------------------------
 class OtpRequest(BaseModel):
     email: str
+#--------------------------------------------------------------for appointment submission data--------------------------
+from typing import List
+from pydantic import BaseModel
+from datetime import date
 
+class AppointmentFormData(BaseModel):
+    hid: str
+    fullname: str
+    dob: str
+    contact: str
+    plant: str
+    description: str
+    visitType: str
+    houseNumber: str
+    street: str
+    city: str
+    state: str
+    pincode: str
+    
+  
+ 
 #----------------------------------------------------database-----------------------------------------------------------
 # http://127.0.0.1:8000/docs.
 uri = "mongodb+srv://harveal:harveal2024@cluster0.25sb0oo.mongodb.net/?retryWrites=true&w=majority"
@@ -43,6 +64,7 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["harveal"]
 collection = db["users"]
 dis_col=db['disease']
+appointdb=db["appointments"]
 #----------------------------------------------------database-------------------------------------------------------------
 
 #-------------------------------------------------------email-----------------------------------------------------------------
@@ -373,3 +395,47 @@ async def appointment(request: Request):
 async def appointment(request: Request):
     return templates.TemplateResponse("mainP.html", {"request": request})
 
+#---------------------------------------appointment_submit----------------------------------------------------------
+@app.post("/submit_appn/")
+async def submit_appointment(
+    hid: str = Form(...),
+    fullname: str = Form(...),
+    dob: str = Form(...),
+    contact: str = Form(...),
+    plant: str = Form(...),
+    description: str = Form(...),
+    visitType: str = Form(...),
+    houseNumber: str = Form(...),
+    street: str = Form(...),
+    city: str = Form(...),
+    state: str = Form(...),
+    pincode: str = Form(...),
+):
+    try:
+        # Validate the form data using the Pydantic model
+        appointment_data = AppointmentFormData(
+            hid=hid,
+            fullname=fullname,
+            dob=dob,
+            contact=contact,
+            plant=plant,
+            description=description,
+            visitType=visitType,
+            houseNumber=houseNumber,
+            street=street,
+            city=city,
+            state=state,
+            pincode=pincode,
+        )
+
+        # Insert the form data into MongoDB
+        appointdb.insert_one(appointment_data.model_dump())
+
+        return {"status": "success", "message": "Form submitted successfully"}
+    except Exception as e:
+        # Handle other exceptions
+        print(f"Error: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Internal Server Error: {str(e)}"
+        )
+        

@@ -9,7 +9,7 @@
 <iframe src="/header/" frameborder="0" width="100%" height="100%"></iframe>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <div class="navbar">
-        <h1>Book Your Appointment</h1>
+        <h1>Book Your Appointment.</h1>
         <div id="google_translate_element" class="translate"></div>
 </div>
 <body>
@@ -17,7 +17,11 @@
 
     <div class="container">
         <h2>Appointment Booking</h2>
-        <form id="appointmentForm">
+        <form id="appointmentForm" method="post"> 
+            <div class="form-group">
+                <label for="hid">HARVEAL ID:</label>
+                <input type="text" id="hid" name="hid" placeholder="eg:- HARV2024253172" required>
+            </div>
             <div class="form-group">
                 <label for="fullname">Full Name:</label>
                 <input type="text" id="fullname" name="fullname" placeholder="eg:- Raghunath ramji Hanumantey" required>
@@ -28,7 +32,7 @@
             </div>
             <div class="form-group">
                 <label for="contact">Contact Number:</label>
-                <input type="tel" id="contact" name="contact" pattern="[0-9]{10}" placeholder="India (+91) format" required>
+                <input type="text" id="contact" name="contact"  placeholder="India (+91) format" required>
             </div>
             <div class="form-group">
                 <label for="plant">Select Plant:</label>
@@ -41,7 +45,7 @@
             </div>
             <div class="form-group">
                 <label for="description">Description:</label>
-                <textarea id="description" name="description" required></textarea>
+                <input type="text" id="description" class="description" name="description" required></input>
             </div>
             <div class="form-group">
                 <label for="visitType">Visit Type:</label>
@@ -65,18 +69,54 @@
                 </div>
                 <div class="form-group">
                     <label for="state">State:</label>
-                    <input type="text" id="state" name="state" disabled>
+                    <select id="state" name="state" disabled>
+                        <option value="">Select State</option>
+                        <option name="state" value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                    </select>
                 </div>
+                
                 <div class="form-group">
                     <label for="pincode">Pincode:</label>
-                    <input type="text" id="pincode" name="pincode" disabled>
+                    <input type="text" id="pincode" name="pincode" placeholder="eg:-410210" disabled>
                 </div>
             </div>
             <button type="button" class="locate" onclick="locateMe()" id="locateMeButton" disabled>Locate Me</button>
-            <button type="submit" class="submitb">Submit</button>
+            <button type="button" id="submitb" class="submitb" onclick="submitForm()">Submit</button>
         </form> 
     </div>
- 
+    <div id="overlay" class="overlay">
+        <div id="successBanner" class="success-banner">
+            <p id="successMessage"></p>
+            <button onclick="dismissBanner()">Dismiss</button>
+        </div>
+    </div>
 </body>
    
     <script src="/static/js/appointjs.js"></script>
