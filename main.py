@@ -54,6 +54,15 @@ class AppointmentFormData(BaseModel):
     state: str
     pincode: str
     
+class VAppointmentFormData(BaseModel):
+    vfid: str
+    vfullname: str
+    vdob: str
+    vcontact: str
+    vplant: str
+    vdescription: str
+    vvisitType: str
+    
   
  
 #----------------------------------------------------database-----------------------------------------------------------
@@ -396,6 +405,55 @@ async def appointment(request: Request):
     return templates.TemplateResponse("mainP.html", {"request": request})
 
 #---------------------------------------appointment_submit----------------------------------------------------------
+# @app.post("/submit_appn/")
+# async def submit_appointment(
+#     hid: str = Form(...),
+#     fullname: str = Form(...),
+#     dob: str = Form(...),
+#     contact: str = Form(...),
+#     plant: str = Form(...),
+#     description: str = Form(...),
+#     visitType: str = Form(...),
+#     houseNumber: str = Form(...),
+#     street: str = Form(...),
+#     city: str = Form(...),
+#     state: str = Form(...),
+#     pincode: str = Form(...),
+# ):
+#     try:
+#         # Validate the form data using the Pydantic model
+#         appointment_data = AppointmentFormData(
+#             hid=hid,
+#             fullname=fullname,
+#             dob=dob,
+#             contact=contact,
+#             plant=plant,
+#             description=description,
+#             visitType=visitType,
+#             houseNumber=houseNumber,
+#             street=street,
+#             city=city,
+#             state=state,
+#             pincode=pincode,
+#         )
+
+#        
+#         # Insert the form data into MongoDB
+        
+#       
+#         appointdb.insert_one(appointment_data.model_dump())
+            
+
+#         return {"status": "success", "message": "Form submitted successfully"}
+#     except Exception as e:
+#         # Handle other exceptions
+#         print(f"Error: {str(e)}")
+#         raise HTTPException(
+#             status_code=500, detail=f"Internal Server Error: {str(e)}"
+#         )
+
+
+
 @app.post("/submit_appn/")
 async def submit_appointment(
     hid: str = Form(...),
@@ -428,6 +486,7 @@ async def submit_appointment(
             pincode=pincode,
         )
 
+   
         # Insert the form data into MongoDB
         appointdb.insert_one(appointment_data.model_dump())
 
@@ -438,4 +497,3 @@ async def submit_appointment(
         raise HTTPException(
             status_code=500, detail=f"Internal Server Error: {str(e)}"
         )
-        

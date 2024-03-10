@@ -45,7 +45,7 @@
             </div>
             <div class="form-group">
                 <label for="description">Description:</label>
-                <input type="text" id="description" class="description" name="description" required></input>
+                <textarea type="text" id="description" class="description" name="description" required></textarea>
             </div>
             <div class="form-group">
                 <label for="visitType">Visit Type:</label>
@@ -57,21 +57,21 @@
             <div class="address-fields">
                 <div class="form-group">
                     <label for="houseNumber">House Number:</label>
-                    <input type="text" id="houseNumber" name="houseNumber" disabled>
+                    <input type="text" id="houseNumber" name="houseNumber" value="none" disabled>
                 </div>
                 <div class="form-group">
                     <label for="street">Street:</label>
-                    <input type="text" id="street" name="street" disabled>
+                    <input type="text" id="street" name="street" value="none" disabled>
                 </div>
                 <div class="form-group">
                     <label for="city">City:</label>
-                    <input type="text" id="city" name="city" disabled>
+                    <input type="text" id="city" name="city" value="none" disabled>
                 </div>
                 <div class="form-group">
                     <label for="state">State:</label>
                     <select id="state" name="state" disabled>
-                        <option value="">Select State</option>
-                        <option name="state" value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="none">Select State</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
                         <option value="Arunachal Pradesh">Arunachal Pradesh</option>
                         <option value="Assam">Assam</option>
                         <option value="Bihar">Bihar</option>
@@ -104,7 +104,7 @@
                 
                 <div class="form-group">
                     <label for="pincode">Pincode:</label>
-                    <input type="text" id="pincode" name="pincode" placeholder="eg:-410210" disabled>
+                    <input type="text" id="pincode" name="pincode" value="none" placeholder="eg:-410210" disabled>
                 </div>
             </div>
             <button type="button" class="locate" onclick="locateMe()" id="locateMeButton" disabled>Locate Me</button>
