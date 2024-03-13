@@ -19,8 +19,9 @@
         <h2>Appointment Booking</h2>
         <form id="appointmentForm" method="post"> 
             <div class="form-group">
-                <label for="hid">HARVEAL ID:</label>
+                <label for="hid">HARVEAL ID :</label>
                 <input type="text" id="hid" name="hid" placeholder="eg:- HARV2024253172" required>
+                <span id="hid-error" class="error-msg"></span>
             </div>
             <div class="form-group">
                 <label for="fullname">Full Name:</label>
@@ -32,7 +33,9 @@
             </div>
             <div class="form-group">
                 <label for="contact">Contact Number:</label>
-                <input type="text" id="contact" name="contact"  placeholder="India (+91) format" required>
+                <input type="text" id="contact" name="contact" placeholder="India (+91) format" required>
+                <div class="error-msg" id="contact-error"></div>
+                
             </div>
             <div class="form-group">
                 <label for="plant">Select Plant:</label>
@@ -58,6 +61,7 @@
                 <div class="form-group">
                     <label for="houseNumber">House Number:</label>
                     <input type="text" id="houseNumber" name="houseNumber" value="none" disabled>
+                   
                 </div>
                 <div class="form-group">
                     <label for="street">Street:</label>
@@ -105,9 +109,9 @@
                 <div class="form-group">
                     <label for="pincode">Pincode:</label>
                     <input type="text" id="pincode" name="pincode" value="none" placeholder="eg:-410210" disabled>
+                    <div class="error-msg" id="pincode-error"></div>
                 </div>
             </div>
-            <button type="button" class="locate" onclick="locateMe()" id="locateMeButton" disabled>Locate Me</button>
             <button type="button" id="submitb" class="submitb" onclick="submitForm()">Submit</button>
         </form> 
     </div>

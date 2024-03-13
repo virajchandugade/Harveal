@@ -5,14 +5,17 @@ function toggleAddressField() {
     
     if (visitType === "physical") {
         addressFields.forEach(function(field) {
+            field.value= "";
             field.removeAttribute("disabled");
         });
-        locateMeButton.removeAttribute("disabled");
+       
     } else {
         addressFields.forEach(function(field) {
+            field.value="none";
             field.setAttribute("disabled", "disabled");
+
         });
-        locateMeButton.setAttribute("disabled", "disabled");
+        
     }
 }
 
@@ -21,10 +24,7 @@ window.onload = function() {
     toggleAddressField();
 };
 
-function locateMe() {
-    // You can write JavaScript code here to get user's location using IP address
-    alert("Location will be located based on IP address.");
-}
+
 
 document.getElementById("appointmentForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent default form submission
@@ -50,6 +50,60 @@ async function submitForm() {
     var city = document.getElementById("city").value;
     var state = document.getElementById("state").value;
     var pincode = document.getElementById("pincode").value;
+
+   
+
+    // HARVEAL ID validation
+    var hidPattern = /^HARV\d{10}$/;
+    if (!hidPattern.test(hid)) {
+        var hidError = document.getElementById("hid-error");
+        var bodo=document.getElementById('hid');
+        bodo.style.borderColor="red";
+        hidError.textContent = "*HARVEAL ID must start with 'HARV' followed by 10 digits.";
+        return; // Stop form submission if validation fails
+    }
+    else{
+        document.getElementById("hid-error").textContent = "";
+        document.getElementById('hid').style.borderColor= "" ;
+    }
+
+
+    // Phone number validation
+    var phoneNumberPattern = /^\d{10}$/;
+    if (!phoneNumberPattern.test(contact)) {
+        var contactError = document.getElementById("contact-error");
+        var bodo=document.getElementById('contact');
+        bodo.style.borderColor="red";
+        contactError.textContent = "*Please enter a valid 10-digit phone number.";
+        return; // Stop form submission if validation fails
+    }
+    else{
+        document.getElementById("contact-error").textContent = "";
+        document.getElementById('contact').style.borderColor= "";
+    }
+
+    // Clear previous error messages if any
+    var pinreg = /^\d{6}$/;
+    if (!pinreg.test(pincode)) {
+        var pinc = document.getElementById("pincode-error");
+        var bodo=document.getElementById('pincode');
+        bodo.style.borderColor="red";
+        pinc.textContent = "*Please enter a valid 6 digit postal zip code.";
+        return; // Stop form submission if validation fails
+    }
+    else{
+        document.getElementById("pincode-error").textContent = "";
+        document.getElementById('pincode').style.borderColor= "";
+    }
+    
+
+
+
+
+
+
+
+
 
     var formData = new FormData();
     formData.append("hid", hid);
@@ -114,3 +168,4 @@ function dismissBanner() {
     overlay.style.display = "none";
     successBanner.style.display = "none";
 }
+
