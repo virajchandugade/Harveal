@@ -29,8 +29,12 @@ from pydantic import BaseModel, ValidationError, validator
 #-----------------------------------------------------------------------------------------------------------------------
 #loading tomato madel---------------------------------------------------------------------------------------------------
 
-mod='tomato_model.keras'
-loaded_model = load_model(mod)
+# mod='tomato_model.keras'
+# loaded_model = load_model(mod)
+
+
+# mod_pump='pumpkin_model.keras'
+# load_model_pumpkin=load_model(mod_pump)
 
 #-----------------------------------------------------------------------------------------------------------------------
 class OtpRequest(BaseModel):
@@ -63,8 +67,8 @@ class VAppointmentFormData(BaseModel):
     vdescription: str
     vvisitType: str
     
-  
- 
+class ptype(BaseModel):
+    plant_type: str
 #----------------------------------------------------database-----------------------------------------------------------
 # http://127.0.0.1:8000/docs.
 uri = "mongodb+srv://harveal:harveal2024@cluster0.25sb0oo.mongodb.net/?retryWrites=true&w=majority"
@@ -320,7 +324,8 @@ async def translate_to_hindi(text_h: str = Form(...)):
     for chunk in text_chunks:
         translator = Translator(to_lang="hi")
         translated_chunk = translator.translate(chunk)
-        translated_text += translated_chunk + " "
+        translated_text += translated_chunk
+        translated_text.replace('br', '\n')
 
     return JSONResponse(content={"translatedText":translated_text.strip()})
 
@@ -361,9 +366,51 @@ async def logout(request: Request, response: JSONResponse):
 
 #-----------------------------------------------------------------------------------------------------------------------
 #prediction of model
+# @app.post("/predmod/")
+# async def prediction(plant_type: str = Form(...),file: UploadFile=File(...)):
+#     with  open(f'uploads/{file.filename}', 'wb+') as imgfile:
+#         imgfile.write(file.file.read())
+        
+#     image_path = f'uploads/{file.filename}'
+#     new_image = image.load_img(image_path, target_size=(64, 64))
+#     new_image_array = image.img_to_array(new_image)
+#     new_image_array = np.expand_dims(new_image_array, axis=0)
+#     new_image_array /= 255.0
+#     prediction = loaded_model.predict(new_image_array)
+
+
+#     class_labels = ['Bacspot','Eblight','LateB','LeafM','septLeaf','SpidM','TarSpot','YellowLeaf','ToMV','Hlty']
+#     predicted_class_index = np.argmax(prediction)
+#     predicted_class = class_labels[predicted_class_index]
+    
+    
+#     detc_disease=dis_col.find_one({'d_id': predicted_class})
+#     result=detc_disease['d_desc']
+    
+#     confid=prediction.squeeze()
+    
+#     print(f"The predicted class is: {predicted_class}")
+#     print(f"Confidence scores: {prediction.squeeze()}")
+        
+#     return JSONResponse(content={"result": result, "confidence": confid.tolist()})
+
 @app.post("/predmod/")
-async def prediction(file: UploadFile=File(...)):
-    with  open(f'uploads/{file.filename}', 'wb+') as imgfile:
+async def prediction(file: UploadFile = File(...),plant_type: str = Form(...)):
+    # Load the appropriate model based on the selected plant type
+    if plant_type == 'Pumpkin':
+        print(plant_type)
+        model_path = 'pumpkin_model.keras'
+        class_labels = ['Alt_cucu', 'Alt_b', 'Aphid', 'ArmW', 'Bact_LS', 'Bact_wilt', 'Cucum_beet', 'Flee_beet', 'Fusa', 'Gum_stem', 'Phy_bli', 'Sqau_bg', 'Thirps', 'Hlty_corn']
+    elif plant_type == 'Tomato':
+        model_path = 'tomato_model.keras'
+        class_labels = ['Bacspot', 'Eblight', 'LateB', 'LeafM', 'septLeaf', 'SpidM', 'TarSpot', 'YellowLeaf', 'ToMV', 'Hlty']
+    else:
+        return JSONResponse(content={"error": "Invalid plant type"})
+    
+    loaded_model = load_model(model_path)
+
+    # Save the uploaded image
+    with open(f'uploads/{file.filename}', 'wb+') as imgfile:
         imgfile.write(file.file.read())
         
     image_path = f'uploads/{file.filename}'
@@ -373,23 +420,20 @@ async def prediction(file: UploadFile=File(...)):
     new_image_array /= 255.0
     prediction = loaded_model.predict(new_image_array)
 
-
-    class_labels = ['Bacspot','Eblight','LateB','LeafM','septLeaf','SpidM','TarSpot','YellowLeaf','ToMV','Hlty']
     predicted_class_index = np.argmax(prediction)
     predicted_class = class_labels[predicted_class_index]
     
+    # Assuming dis_col is your MongoDB collection for disease descriptions
+    detc_disease = dis_col.find_one({'d_id': predicted_class})
+    result = detc_disease['d_desc']
     
-    detc_disease=dis_col.find_one({'d_id': predicted_class})
-    result=detc_disease['d_desc']
-    
-    confid=prediction.squeeze()
-    
-    
+    confidence = prediction.squeeze()
 
     print(f"The predicted class is: {predicted_class}")
-    print(f"Confidence scores: {prediction.squeeze()}")
+    print(f"Confidence scores: {confidence}")
         
-    return JSONResponse(content={"result": result, "confidence": confid.tolist()})
+    return JSONResponse(content={"result": result, "confidence": confidence.tolist()})
+
 #-----------------------------header.html------------------------------------------------------------------
 @app.get("/header/", response_class=HTMLResponse)
 async def render_header(request: Request):

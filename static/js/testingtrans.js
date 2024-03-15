@@ -38,8 +38,11 @@ async function translateTexthindi() {
         });
 
         if (response.ok) {
-            const result = await response.json();
-            document.getElementById('translationResult').innerText = `Translated Text: ${result.translatedText}`;
+            const resulth = await response.json();
+
+            const formattedTexth = resulth.translatedText.replace(/<br>/g, '\n');
+
+            document.getElementById('translationResult').innerText = `Translated Text: ${formattedTexth}`;
         } else {
             console.error('Failed to translate:', response.statusText);
         }
@@ -89,6 +92,9 @@ function handleFileInput(event) {
             img.src = e.target.result;
             document.getElementById('imgview').innerHTML = ''; // Clear previous image
             document.getElementById('imgview').appendChild(img); // Display new image
+            img.style.width = 450+ 'px';
+            img.style.height= 450+ 'px';
+            document.getElementById('drdp').textContent='';
         };
         reader.readAsDataURL(file);
     }
@@ -112,6 +118,9 @@ function handleDrop(event) {
             img.src = e.target.result;
             document.getElementById('imgview').innerHTML = ''; // Clear previous image
             document.getElementById('imgview').appendChild(img); // Display new image
+            img.style.width = 450+ 'px';
+            img.style.height= 450+ 'px';
+            document.getElementById('drdp').textContent='';
         };
         reader.readAsDataURL(file);
     }
@@ -128,9 +137,12 @@ async function detectDisease() {
     const fileInput = document.getElementById('input-file');
     const file = fileInput.files[0];
 
+    const plantType = document.getElementById('plant_type').value;
+
     // Prepare the data to send to the FastAPI endpoint
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('plant_type', plantType);
 
     try {
         // Make an asynchronous request to the FastAPI endpoint

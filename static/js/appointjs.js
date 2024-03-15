@@ -82,20 +82,40 @@ async function submitForm() {
         document.getElementById('contact').style.borderColor= "";
     }
 
-    // Clear previous error messages if any
-    var pinreg = /^\d{6}$/;
-    if (!pinreg.test(pincode)) {
-        var pinc = document.getElementById("pincode-error");
-        var bodo=document.getElementById('pincode');
+    var des=document.getElementById("description").value
+    if(des===""){
+        var desError = document.getElementById("des-error");
+        var bodo=document.getElementById('description');
         bodo.style.borderColor="red";
-        pinc.textContent = "*Please enter a valid 6 digit postal zip code.";
-        return; // Stop form submission if validation fails
-    }
+        desError.textContent = "*Description cannot be blank.";
+        return; // Stop form submission if validation fails  
+    }   
     else{
-        document.getElementById("pincode-error").textContent = "";
-        document.getElementById('pincode').style.borderColor= "";
+        document.getElementById("des-error").textContent = "";
+        document.getElementById('description').style.borderColor= "";
     }
-    
+
+
+    // Clear previous error messages if any
+    var vt = document.getElementById("visitType").value;
+    if(vt==="physical"){
+        
+        var pinreg = /^\d{6}$/;
+        if (!pinreg.test(pincode)) {
+            var pinc = document.getElementById("pincode-error");
+            var bodo=document.getElementById('pincode');
+            bodo.style.borderColor="red";
+            pinc.textContent = "*Please enter a valid 6 digit postal zip code.";
+            return; // Stop form submission if validation fails
+        }
+        else{
+            document.getElementById("pincode-error").textContent = "";
+            document.getElementById('pincode').style.borderColor= "";
+        }
+        
+
+    }
+   
 
 
 

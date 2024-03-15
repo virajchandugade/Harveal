@@ -1,12 +1,16 @@
 body {
-  background-image: url(/static/images/tom.jpg);
+  background-image: url(/static/images/frm.jpg);
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: 0px -50px;
+  background-size: cover;
+  background-attachment: fixed;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+ 
 }
+
+
 
 .container {
   display: flex;
@@ -16,8 +20,9 @@ body {
 
 .textInput {
   color: rgb(2, 2, 2);
-  width: 80%;
+  width: 550px;
   margin: 20px auto;
+  align-items: center;
   font-size: large;
   padding: 20px;
   background-color: rgba(255, 255, 255, 0.7);
@@ -50,6 +55,11 @@ body {
   border-radius: 9px;
   cursor: pointer;
 }
+.detect_disease:hover{
+  background-color: rgb(9, 119, 46);
+}
+
+
 
 .lang-marathi,
 .lang-hindi {
@@ -64,6 +74,13 @@ body {
   cursor: pointer;
   margin: 10px 5px; /* Reduce margin between Marathi and Hindi buttons */
 }
+.lang-marathi:hover{
+  background-color: rgb(9, 119, 46);
+}
+.lang-hindi:hover{
+  background-color: rgb(9, 119, 46);
+}
+
 
 
 
@@ -94,16 +111,6 @@ body {
   margin: 20px auto; /* Center the d_img */
 }
 
-/* height: 300px;
-width: 300px;
-background-color: #f0f0f0;
-border: 2px dashed #ccc;
-border-radius: 10px;
-display: flex;
-justify-content: center; 
-align-items: center; 
-text-align: center;
-overflow: hidden; */
 
 #imgview img {
   max-width: 100%; /* Ensure the image does not exceed the container width */
@@ -139,17 +146,29 @@ overflow: hidden; */
   border-radius: 9px;
   cursor: pointer;
 }
-
+.read:hover{
+  background-color: rgb(9, 119, 46);
+}
 .reading {
   display: flex;
-  flex-direction: column; /* Arrange items vertically */
-  align-items: center; /* Center items horizontally */
+  flex-direction: column;
+  align-items: center; 
 }
 
+
 .readH {
-  margin-bottom: 10px; /* Add space between label and button */
-  color: white; /* Set text color to white */
+  height: 30px;
+  width: 210vh;
+  background-color: rgb(13, 202, 76);
+  padding: 10px; 
+  text-align: center;
+  color: rgb(255, 255, 255); 
+  font-size: 25px;
+  border-radius: 5px;
 }
+
+
+
 
 #audioContainer audio {
   width: 100%; /* Set width to fill the container */
@@ -184,3 +203,66 @@ overflow: hidden; */
   position: relative;
 }
 
+.result {
+  display: block;
+  width: 210.1vh;
+  margin-top: 60px;   /* Add space above the label */
+  background-color: rgb(13, 202, 76);
+  padding: 10px; 
+  text-align: center;
+  color: rgb(255, 255, 255); 
+  font-size: 25px;
+  
+}
+
+.thead{
+  height: 10px;
+  width: 210.1vh;
+  background-color: rgba(0,0,0, 0.4);
+  padding: 10px; 
+  text-align: center;
+  margin-left: 27%;
+  color: rgb(49, 250, 116); 
+  font-size: 23px;
+  border-radius: 5px;
+}
+
+.drdp{
+  color: rgba(0,0,0, 0.5);
+}
+
+.select-container {
+  position: relative;
+  width: 200px; /* Adjust width as needed */
+}
+
+/* Style the dropdown button */
+#plant_type {
+  display: flex;
+  width: 250px; 
+  background-color:rgb(13, 202, 76) ;
+  margin-top: 100px;
+  font-size: 25px; 
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px; 
+  border: 2px solid #4CAF50; 
+  text-align: center; 
+  margin: 0 auto; 
+  
+}
+
+.pt_drop{
+  background-color: rgba(0,0,0, 0.6);
+  padding: 20px;
+  margin-top: -10px;
+}
+
+.phead{
+  display: flex;
+  margin-left: 35%;
+  padding-bottom: 20px;
+  text-align: center;
+  font-size: 25px;
+  color: rgb(49, 250, 116);
+}

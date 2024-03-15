@@ -9,10 +9,20 @@
 </head>
 <iframe src="/header/" frameborder="0" width="100%" height="100%"></iframe>
 <body>
+    <div id="pt_drop" class="pt_drop">
+        <label id="phead" class="phead"><strong>Select the type of plant that is requierd </strong></label>
+        <select id="plant_type" name="plant_type">
+            <option value="">select plant type</option> 
+            <option value="Pumpkin">Pumpkin</option>
+            <option value="Tomato">Tomato</option>
+        </select>
+    </div>
+    
+
     <div class="drop-img-cont">
         <section class="d_img" id="drop-area" onclick="uploadImage()" ondragover="allowDrop(event)" ondrop="handleDrop(event)">
-            <p>Click here or drag & drop image</p>
-            <input type="file" id="input-file" accept="image/*" onchange="handleFileInput(event)">
+            <p id="drdp" class="drdp">Click here or drag & drop image</p>
+            <input type="file" id="input-file" accept="image/*" onchange="handleFileInput(event)" ondrop="handleDrop(event)" ondragover="allowDrop(event)" onclick="uploadImage()" >
             <div id="imgview"></div>
         </section>
     </div>
@@ -21,16 +31,18 @@
 
         <button id="detect_disease" class="detect_disease" onclick="detectDisease()"> detect </button>
         <div class="result_box" id="result_box">
-            <label class="result">Result</label>
+            <label class="result">Get disease detection details below</label>
             <div id="textInput" class="textInput">
                 <pre>
-                   {{result}} 
+                    {{result}}
                 </pre>
-                
-            </div>    
+            </div>  
+            <br><br>
+            <label class="thead"><strong>Click below to see the information in the language of your choice</strong></label>
         </div>
         
-        <div class="translation">  
+        <div class="translation">
+           
             <button class="lang-marathi" onclick="translateText()">Marathi</button>
             <button class="lang-hindi" onclick="translateTexthindi()">Hindi</button>
             
@@ -40,22 +52,24 @@
                 </p>
             </div>
         </div>
-       
+<!--        
         <div class="reading">
+            <span class="solid-line"></span>
             <label class="readH">Cick here, to Read Out Loud</label>
+            <span class="solid-line"></span>
+            <button class="read" onclick="readOutLoud()"><i class="fa-solid fa-headphones-simple"></i></button>
+        </div> -->
+
+        <div class="reading">
+            <label class="readH">Experience disease detection details audibly by clicking below</label>
             <button class="read" onclick="readOutLoud()"><i class="fa-solid fa-headphones-simple"></i></button>
         </div>
+        
 
     </div>
 
  
-       
-
-    <div class="container" id="audioContainer">
-        
-    </div>
-
-    
+    <div class="container" id="audioContainer"></div>
     <script src="/static/js/testingtrans.js"></script>
 </body>
 </html>
