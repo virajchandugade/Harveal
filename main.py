@@ -366,33 +366,6 @@ async def logout(request: Request, response: JSONResponse):
 
 #-----------------------------------------------------------------------------------------------------------------------
 #prediction of model
-# @app.post("/predmod/")
-# async def prediction(plant_type: str = Form(...),file: UploadFile=File(...)):
-#     with  open(f'uploads/{file.filename}', 'wb+') as imgfile:
-#         imgfile.write(file.file.read())
-        
-#     image_path = f'uploads/{file.filename}'
-#     new_image = image.load_img(image_path, target_size=(64, 64))
-#     new_image_array = image.img_to_array(new_image)
-#     new_image_array = np.expand_dims(new_image_array, axis=0)
-#     new_image_array /= 255.0
-#     prediction = loaded_model.predict(new_image_array)
-
-
-#     class_labels = ['Bacspot','Eblight','LateB','LeafM','septLeaf','SpidM','TarSpot','YellowLeaf','ToMV','Hlty']
-#     predicted_class_index = np.argmax(prediction)
-#     predicted_class = class_labels[predicted_class_index]
-    
-    
-#     detc_disease=dis_col.find_one({'d_id': predicted_class})
-#     result=detc_disease['d_desc']
-    
-#     confid=prediction.squeeze()
-    
-#     print(f"The predicted class is: {predicted_class}")
-#     print(f"Confidence scores: {prediction.squeeze()}")
-        
-#     return JSONResponse(content={"result": result, "confidence": confid.tolist()})
 
 @app.post("/predmod/")
 async def prediction(file: UploadFile = File(...),plant_type: str = Form(...)):

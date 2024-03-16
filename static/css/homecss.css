@@ -1,32 +1,211 @@
 @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Quicksand:wght@300&display=swap');
 
-*{
-    margin: 0;
-    padding: 0;
+/*the green color used :rgb(13, 202, 76)*/
+/*the black used:rgb(0, 0, 0,0.5)*/
+
+body{
+    background-image: url(/static/images/mpbg2.jpg);
+    background-repeat:  no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
     box-sizing: border-box;
     font-family: 'Didact Gothic', sans-serif;
+    height: 100%;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    
 }
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity here (0.5 is 50% opacity) */
+    z-index: -1;
+  }
+
 
 header{
     display: flex;
     align-items: center;
+    background-color: rgb(13, 202, 76);
     padding: 20px 3%;
 }
 
 .navlist ul{
     
-    margin-left: 420px;
+    margin-left: 190px;
 }
 
-
-
-/* .navlist ul{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-} */
-
-.navlist li{
+.navlist li,a{
     display: inline;
-    padding-right: 10px;
+    padding-right: 15px;
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
 }
+
+
+
+.headname{
+    color: white;
+    font-size: 44px;
+    cursor: pointer;
+    
+}
+
+.siglog{
+    background-color: rgb(0, 0, 0,0.5);
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.siglog:hover{
+    background-color: rgb(9, 119, 46);
+    transform: scale(1.1);
+}
+
+.s1_h{
+    display: flex;
+    font-size: 60px;
+    color: rgb(255, 255, 255);
+    margin-top: 230px;
+    margin-left: 55px;
+    text-decoration:double;
+    font-weight: bolder;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.9s ease-out; /* Smooth transition for slide effect */
+}
+
+.s1_h2{
+    display: flex;
+    font-size: 30px;
+    color:rgb(13, 202, 76);
+    margin-left: 55px;
+    text-decoration:double;
+    font-weight: bolder;
+    justify-content: center;
+}
+
+.s1_b{
+    display: flex;
+    font-size: 20px;
+    background-color: rgb(13, 202, 76);
+    color: white;
+    margin-top: 20px;
+    margin-left: 46%;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius:8px ;
+    transition: transform 0.3s ease-in-out;
+
+}
+
+.s1_b:hover{
+    background-color: rgb(9, 119, 46);
+    transform: scale(1.1);
+    
+    
+}
+
+.s2_h{
+    display: flex;
+    font-size: 60px;
+    color: rgb(255, 255, 255);
+    margin-top: 230px;
+    margin-left: 55px;
+    text-decoration:double;
+    font-weight: bolder;
+    justify-content: center;
+    
+}
+
+.s2_h2{
+    display: flex;
+    font-size: 30px;
+    color:rgb(13, 202, 76);
+    margin-left: 55px;
+    text-decoration:double;
+    font-weight: bolder;
+    justify-content: center;
+
+}
+  .image-container {
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+  }
+  
+  /* Individual images */
+  .image-container img {
+    width: 400px; 
+    margin: 0 10px; 
+    margin-top: 30px;
+    border-radius: 9px;
+    transition: transform 0.3s ease-in-out;
+
+  }
+
+.image-container img:hover {
+    transform: scale(1.1); 
+    margin: 0 25px;
+    
+  }
+
+  .s3_h{
+    display: flex;
+    font-size: 60px;
+    color: rgb(255, 255, 255);
+    margin-top: 230px;
+    margin-left: 55px;
+    text-decoration:double;
+    font-weight: bolder;
+    justify-content: center;
+  }
+
+  .s3_h3{
+    display: flex;
+    font-size: 30px;
+    color:rgb(13, 202, 76);
+    margin-left: 55px;
+    text-decoration:double;
+    font-weight: bolder;
+    justify-content: center;
+  }
+
+  .marquee-container {
+    margin-top: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: rgb(0, 0, 0,0.5)
+  }
+  
+  .marquee {
+    animation: marquee 20s linear infinite;
+    font-size: 25px;
+    
+  }
+  
+  .marquee.right {
+    animation-direction: reverse;
+    
+  }
+  
+  @keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  
