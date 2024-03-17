@@ -18,11 +18,11 @@ body {
 }
 
 .navbar {
-    background-color:rgb(7, 161, 58); /* Green color */
+    background-color:rgb(0, 0, 0,0.8); /* Green color */
     color: #fff;
     text-align: center;
     font-size: 25px;
-    margin-top: -10px;
+    margin-top: -44px;
     padding: 10px 0;
 }
 

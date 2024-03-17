@@ -25,6 +25,7 @@ from fastapi.security import OAuth2PasswordBearer
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
+from fastapi import Query
 from pydantic import BaseModel, ValidationError, validator
 #-----------------------------------------------------------------------------------------------------------------------
 #loading tomato madel---------------------------------------------------------------------------------------------------
@@ -113,13 +114,21 @@ def get_current_user(session: dict = Depends(lambda s: s.session)):
     user_id = session.get("user_id")
     if user_id not in collection:
         return None
-    return collection[user_id]
+    else:
+        print("ud",user_id)
+        return collection[user_id]
 
 
+
+
+
+@app.get("/sig_log/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("LogReg.html", {"request": request})
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("LogReg.html", {"request": request})
+    return templates.TemplateResponse("Home.html", {"request": request})
 
 
 
@@ -238,7 +247,7 @@ Id_user="HARV2024"+str(log_id)
 
 #new user---------------------------------------------------------------------------------------------------------------
 @app.post("/register_user/")
-async def register(phone: str = Form(...), email: str = Form(...),otp:int=Form(...)):
+async def register(request: Request,phone: str = Form(...), email: str = Form(...),otp:int=Form(...)):
     # Insert the received data into MongoDB
     user_data = {
         "phone_number":phone,
@@ -255,7 +264,8 @@ async def register(phone: str = Form(...), email: str = Form(...),otp:int=Form(.
         collection.insert_one(user_data)
   
     # Store the session ID in a cookie
-        return RedirectResponse(url="/mainpg/")
+        return templates.TemplateResponse("mainP.html", {"request": request})
+
 
    
 #----------------------------------------------------------------------------------------------------------------------   
@@ -268,10 +278,12 @@ async def login(request: Request,logID:str=Form(...),logOTP:int=Form(...)):
     print(logID)
     if (logOTP == log_otp_user):
         session_id = str(datetime.utcnow().timestamp())
-        request.session["user_id"] = logID
+        iid=request.session["user_id"] = logID
+        print(iid)
+        
         response = templates.TemplateResponse("mainP.html", {"request": request})
         response.set_cookie(key="session_id", value=session_id, expires=timedelta(minutes=SESSION_TIMEOUT_MINUTES))
-        return templates.TemplateResponse("mainP.html", {"request": request})
+        return response
     else:
         return {"what a waste!"}  
     
@@ -357,7 +369,7 @@ async def protected_route(current_user: dict = Depends(get_current_user)):
 
 #-----------------------------------------------------------------------------------------------------------------------
 #logout endpoint
-@app.post("/logout/", response_class=HTMLResponse)
+@app.get("/logout/", response_class=HTMLResponse)
 async def logout(request: Request, response: JSONResponse):
     response.delete_cookie(key="session_id")
     request.session.clear()
@@ -415,6 +427,11 @@ async def render_header(request: Request):
 @app.get("/appointment/", response_class=HTMLResponse)
 async def appointment(request: Request):
     return templates.TemplateResponse("appoint.html", {"request": request})
+ 
+
+
+
+    
 
 #----------------------------------------mainpage--------------dignose------------------------------------
 @app.get("/diagnose/", response_class=HTMLResponse)
