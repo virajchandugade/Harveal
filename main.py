@@ -25,7 +25,7 @@ from fastapi.security import OAuth2PasswordBearer
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
-from fastapi import Query
+from bson import ObjectId 
 from pydantic import BaseModel, ValidationError, validator
 #-----------------------------------------------------------------------------------------------------------------------
 #loading tomato madel---------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ class VAppointmentFormData(BaseModel):
 class ptype(BaseModel):
     plant_type: str
 #----------------------------------------------------database-----------------------------------------------------------
-# http://127.0.0.1:8000/docs.
+# http://127.0.0.1:8000/docs
 uri = "mongodb+srv://harveal:harveal2024@cluster0.25sb0oo.mongodb.net/?retryWrites=true&w=majority"
 
 client = MongoClient(uri, server_api=ServerApi('1'))
@@ -79,6 +79,7 @@ db = client["harveal"]
 collection = db["users"]
 dis_col=db['disease']
 appointdb=db["appointments"]
+admin_collection=db["admin"]
 #----------------------------------------------------database-------------------------------------------------------------
 
 #-------------------------------------------------------email-----------------------------------------------------------------
@@ -101,7 +102,7 @@ app.add_middleware(
     allow_headers=["*"]
     
 )
-SECRET_KEY = "harveal_45512"
+SECRET_KEY = secrets.token_hex(32)
 
 # Session timeout in minutes
 SESSION_TIMEOUT_MINUTES = 30
@@ -110,13 +111,19 @@ app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-def get_current_user(session: dict = Depends(lambda s: s.session)):
+
+def get_session(request: Request):
+    print("this is session:",request.session)
+    return request.session
+
+async def get_current_user(session: dict = Depends(get_session)):
     user_id = session.get("user_id")
-    if user_id not in collection:
-        return None
-    else:
-        print("ud",user_id)
-        return collection[user_id]
+    print("thiss is uid in session:",user_id)
+    if user_id:
+        user = collection.find_one({"HARV_ID": user_id})
+        if user:
+            return user
+    return None
 
 
 
@@ -262,9 +269,15 @@ async def register(request: Request,phone: str = Form(...), email: str = Form(..
         return{"incorrect otp"}
     else:
         collection.insert_one(user_data)
+        session_id = str(datetime.utcnow().timestamp())
+        request.session["user_id"] = Id_user
+        print(request.session["user_id"])
   
     # Store the session ID in a cookie
-        return templates.TemplateResponse("mainP.html", {"request": request})
+        response= templates.TemplateResponse("Inhome.html", {"request": request})
+        response.set_cookie(key="session_id", value=session_id, expires=timedelta(minutes=SESSION_TIMEOUT_MINUTES))
+        return response
+        
 
 
    
@@ -278,10 +291,10 @@ async def login(request: Request,logID:str=Form(...),logOTP:int=Form(...)):
     print(logID)
     if (logOTP == log_otp_user):
         session_id = str(datetime.utcnow().timestamp())
-        iid=request.session["user_id"] = logID
-        print(iid)
+        request.session["user_id"] = logID
+        print("dem:",request.session["user_id"] )
         
-        response = templates.TemplateResponse("mainP.html", {"request": request})
+        response = templates.TemplateResponse("Inhome.html", {"request": request})
         response.set_cookie(key="session_id", value=session_id, expires=timedelta(minutes=SESSION_TIMEOUT_MINUTES))
         return response
     else:
@@ -320,11 +333,6 @@ async def translate_to_marathi(text: str = Form(...)):
 
     return JSONResponse(content={"translatedText": translated_text.strip()})
    
-
-
-
-#return JSONResponse(content={"translatedText": translated_text})
-    
 #for translation in marathi 
 #for translation in hindi
 @app.post("/translate_hindi/")
@@ -425,21 +433,31 @@ async def render_header(request: Request):
     return templates.TemplateResponse("header.html", {"request": request})
 #---------------------------appointment----------------------------------------------------------------------
 @app.get("/appointment/", response_class=HTMLResponse)
-async def appointment(request: Request):
-    return templates.TemplateResponse("appoint.html", {"request": request})
+async def appointment(request: Request, current_user: dict = Depends(get_current_user)):
+    if current_user:
+        return templates.TemplateResponse("appoint.html", {"request": request})
+    else:
+         return RedirectResponse(url="/sig_log/")
  
-
-
-
-    
-
 #----------------------------------------mainpage--------------dignose------------------------------------
 @app.get("/diagnose/", response_class=HTMLResponse)
-async def appointment(request: Request):
-    return templates.TemplateResponse("mainP.html", {"request": request})
+async def appointment(request: Request,current_user: dict = Depends(get_current_user)):
+    if current_user:
+        return templates.TemplateResponse("mainP.html", {"request": request})
+    else:
+         return RedirectResponse(url="/sig_log/")
+#-----------------------------------------------home_aft_log_sig--------------------------------------------------------
+@app.get("/Inhome/", response_class=HTMLResponse)
+async def appointment(request: Request,current_user: dict = Depends(get_current_user)):
+    if current_user:
+        return templates.TemplateResponse("Inhome.html", {"request": request})
+    else:
+         return RedirectResponse(url="/sig_log/")
+#---------------------------------------admin(displaying appts)----------------------------------------------------
+
+#---------------------------------------admin login page-------------------------------------------------------------
 
 #---------------------------------------appointment_submit----------------------------------------------------------
-
 @app.post("/submit_appn/")
 async def submit_appointment(
     hid: str = Form(...),
@@ -475,6 +493,10 @@ async def submit_appointment(
    
         # Insert the form data into MongoDB
         appointdb.insert_one(appointment_data.model_dump())
+        user_data = collection.find_one({"HARV_ID": hid})
+        receiver_email = user_data["email"]
+        
+        send_appointment_confirmation_email(appointment_data, receiver_email)
 
         return {"status": "success", "message": "Form submitted successfully"}
     except Exception as e:
@@ -483,3 +505,86 @@ async def submit_appointment(
         raise HTTPException(
             status_code=500, detail=f"Internal Server Error: {str(e)}"
         )
+
+def send_appointment_confirmation_email(appointment_data, receiver_email):
+    # Email configuration
+    sender_email = "harvealsup628@gmail.com"
+    sender_password = "pcla mrfa myju mdtp"
+
+    # Constructing the message
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = receiver_email
+    message['Subject'] = "Harveal-Appointment Confirmation"
+
+    # Message body
+    body = f"Dear {appointment_data.fullname},\n\n"\
+           "Thank you for booking your appointment with us.\n"\
+           "Here are the details of your appointment:\n"\
+           f"Appointment ID: {appointment_data.hid}\n"\
+           f"Name: {appointment_data.fullname}\n"\
+           f"Plant: {appointment_data.plant}\n"\
+           f"Description: {appointment_data.description}\n"\
+           f"Address: {appointment_data.houseNumber}, {appointment_data.street}, "\
+           f"{appointment_data.city}, {appointment_data.state}, {appointment_data.pincode}\n\n"\
+           "If any changes are needed, please contact us at our toll-free number: 1800-XXX-XXXX.\n\n"\
+           "We look forward to seeing you.\n"\
+           "Best regards,\nYour Organization"
+
+    message.attach(MIMEText(body, 'plain'))
+
+    # Sending the email
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"An error occurred while sending the email: {str(e)}")
+
+
+#-----------------------------------adminlogin------------------------------------------------------------------------
+@app.get("/adminlog/", response_class=HTMLResponse)
+async def appointment(request: Request):
+    return templates.TemplateResponse("admin.html", {"request": request})
+
+
+
+
+class AdminLoginRequest(BaseModel):
+    admin_id: str
+    password: str
+
+@app.post("/admin-login/", response_class=HTMLResponse)
+async def admin_login(request: Request, admin_id: str = Form(...), password: str = Form(...)):
+    admin = admin_collection.find_one({"admin_id": admin_id})
+    if admin:
+        return templates.TemplateResponse("adminapp.html", {"request": request}) 
+    else:
+        return templates.TemplateResponse("admin.html", {"request": request})
+    
+
+#-------------------------------------------------------------get appnt------------------------------------------------
+@app.get("/api/appointments")
+async def get_appointments():
+    appointments = list(appointdb.find({}))
+    
+    # Convert ObjectId to string in each appointment
+    for appointment in appointments:
+        appointment["_id"] = str(appointment["_id"])  # Convert ObjectId to string
+    
+    return appointments
+#---------------------------------------deletion app-----------------------------------------------------------------
+@app.post("/api/appointments/{hid}/delete")
+async def delete_appointment(hid: str):
+    try:
+        # Delete the appointment from the database based on the provided hid
+        result = appointdb.delete_one({"hid": hid})
+        
+        if result.deleted_count == 1:
+            return {"message": "Appointment deleted successfully"}
+        else:
+            raise HTTPException(status_code=404, detail="Appointment not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

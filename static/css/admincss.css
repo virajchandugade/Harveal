@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url(/static/images/admin.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+    background-position: center;
+    background-size: cover;
+}
+
+.navbar {
+    background-color: rgb(13, 202, 76);
+    color: white;
+    padding: 10px;
+    height: 50px;
+    text-align: center;
+    align-items: center;
+}
+.hhead{
+font-weight: bolder;
+align-items: center;
+font-size: 30px;
+align-items: center;
+}
+
+.login-container {
+    width: 300px;
+    margin: 100px auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    text-align: center;
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    color: white;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: rgb(13, 202, 76);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}

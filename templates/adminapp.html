@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Quicksand:wght@300&display=swap');
+        .nav-container {
+            background-color: green;
+            padding: 10px;
+            text-align: center;
+        }
+        .hed {
+            color: white;
+        }
+        .appointment {
+            background-color: rgb(0,0,0,0.6);
+            color: white;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="hed">
+            <label>Appointments</label>
+        </div>
+    </nav>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button id="get-appointments-btn">Get Appointments</button>
+    </div>
+
+    <div id="appointments-container"></div>
+
+    <script>
+        
+            document.getElementById('get-appointments-btn').addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/api/appointments');
+                    const appointments = await response.json();
+                    renderAppointments(appointments);
+                } catch (error) {
+                    console.error('Error fetching appointments:', error);
+                }
+            });
+        
+            function renderAppointments(appointments) {
+                const appointmentsContainer = document.getElementById('appointments-container');
+                appointmentsContainer.innerHTML = '';
+        
+                appointments.forEach(appointment => {
+                    const appointmentDiv = document.createElement('div');
+                    appointmentDiv.classList.add('appointment');
+        
+                    const table = document.createElement('table');
+                    table.innerHTML = `
+                        <tr>
+                            <th>harvID</th>
+                            <td>${appointment.hid}</td>
+                        </tr>
+
+
+                        <tr>
+                            <th>Full Name</th>
+                            <td>${appointment.fullname}</td>
+                        </tr>
+                        <tr>
+                            <th>Date of Birth</th>
+                            <td>${appointment.dob}</td>
+                        </tr>
+                        <tr>
+                            <th>Contact</th>
+                            <td>${appointment.contact}</td>
+                        </tr>
+                        <tr>
+                            <th>Plant</th>
+                            <td>${appointment.plant}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>${appointment.description}</td>
+                        </tr>
+                        <tr>
+                            <th>Visit Type</th>
+                            <td>${appointment.visitType}</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>${appointment.houseNumber}, ${appointment.street}, ${appointment.city}, ${appointment.state}, ${appointment.pincode}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button class="cancel-btn" onclick="cancelAppointment('${appointment.hid}')">Cancel</button>
+
+                            </td>
+                        </tr>
+                    `;
+                    appointmentDiv.appendChild(table);
+                    appointmentsContainer.appendChild(appointmentDiv);
+                });
+            }
+        
+            async function cancelAppointment(appointmentId) {
+                try {
+                    const response = await fetch(`/api/appointments/${appointmentId}/delete`, {
+                        method: 'POST'
+                    });
+                    if (response.ok) {
+                        // Remove the appointment from the UI
+                        const appointmentElement = document.querySelector(`.appointment button[data-id="${appointmentId}"]`).closest('.appointment');
+                        if (appointmentElement) {
+                            appointmentElement.remove();
+                        }
+                    } else {
+                        console.error('Failed to cancel appointment');
+                    }
+                } catch (error) {
+                    console.error('Error cancelling appointment:', error);
+                }
+            }
+        
+        
+    </script>
+</body>
+</html>

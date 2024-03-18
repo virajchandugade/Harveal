@@ -116,15 +116,6 @@ async function submitForm() {
 
     }
    
-
-
-
-
-
-
-
-
-
     var formData = new FormData();
     formData.append("hid", hid);
     formData.append("fullname", fullname);
