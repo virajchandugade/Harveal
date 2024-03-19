@@ -72,7 +72,9 @@ header{
 }
 
 .siglog:hover{
+  
     background-color: rgb(9, 119, 46);
+    
     transform: scale(1.1);
 }
 
