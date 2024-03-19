@@ -165,3 +165,31 @@ button:hover {
 }
 
 
+.footer {
+    background-color: rgb(13, 202, 76);
+    color: white;
+  
+    text-align: center;
+    padding: 20px 0;
+    
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footer-label {
+    font-weight: bold;
+    font-size: 35px;
+    margin-bottom: 10px;
+  }
+  
+  .footer-copyright {
+    font-size: 14px;
+    color: black;
+  }
+  
+  

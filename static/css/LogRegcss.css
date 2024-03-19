@@ -16,34 +16,43 @@ body{
     min-height: 100vh;
     overflow: hidden;
 }
-header{
+header {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 93%;
     display: flex;
-    justify-content: space-between;
-    font-size: 20px;
-    padding: 10px 10px;
+    align-items: center; /* Vertically center items */
     color: white;
 }
 
-.head{
-    display: flex;
-    justify-content: center;
-    align-items: center; 
+.logo {
+    width: 120px;
+    height: 130px;
+    margin-right: 1px; /* Pushes the logo and Harveal to the left */
+    margin-left: -25px;
 }
 
-.head-div label{
-    font-size: 33px;
-    
+h1 {
+    margin: 0;
+    font-size: 48px; /* Adjust font size as needed */
+    margin-left: -15px;
+    font-weight: bolder;
 }
-.sub{
-    align-self: center;
-    font-size: xx-large;
+
+.sub {
+    margin-left: auto; /* Pushes Your plant specialist to the right */
+    font-size: 30px; /* Adjust font size as needed */
+    font-weight: bold;
 }
+
+.translate {
+    margin-left: auto; /* Pushes Google Translate to the right */
+}
+
 
 .Form-box{
+    margin-top: 120px;
     width: 400px;
     height: 430px;
     backdrop-filter: blur(9px);
@@ -82,15 +91,6 @@ header{
 .Register-form .input-box{
     margin: 20px 0px;
 }
-/* .input-box input{
-    width: 90%;
-    position: absolute;
-    color: white;
-    font-size: 20px;
-    border: none;
-    background: none;
-    outline: none;
-}  */
 
 .input-box input{
     width: 100%;
@@ -211,3 +211,34 @@ header{
 .change-form .Register-form{
     transform: translateX(0%);
 }
+
+.footer {
+    background-color: rgb(13, 202, 76);
+    color: white;
+  
+    text-align: center;
+    padding: 20px 0;
+    
+    bottom: 0;
+    width: 100%;
+
+    margin-top: 10vh;
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footer-label {
+    font-weight: bold;
+    font-size: 35px;
+    margin-bottom: 10px;
+  }
+  
+  .footer-copyright {
+    font-size: 14px;
+    color: black;
+  }
+  
+  

@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Quicksand:wght@300&display=swap');
+
+*{
+    font-family: 'Didact Gothic', sans-serif;
+}
+
+
 body{
     box-sizing: border-box;
     font-family: 'Didact Gothic', sans-serif;
@@ -13,10 +20,15 @@ header{
     display: flex;
     align-items: center;
     background-color: rgb(13, 202, 76);
-    padding: 20px 3%;
+    padding: -10px 3%;
     position:sticky;
 }
 
+.logo {
+    width: 120px; 
+    height: 130px; 
+   
+  }
 .navlist ul{
     
     margin-left: 290px;

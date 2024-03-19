@@ -33,13 +33,19 @@ header{
     display: flex;
     align-items: center;
     background-color: rgb(13, 202, 76);
-    padding: 20px 3%;
+    padding: -10px 3%;
     position:sticky;
+}
+
+.logo {
+  width: 120px; 
+  height: 130px; 
+ 
 }
 
 .navlist ul{
     
-    margin-left: 290px;
+    margin-left: 200px;
 }
 
 .navlist li,a{
@@ -174,16 +180,17 @@ header{
   }
   
   /* Individual images */
-  .image-container img {
+  .image-container .img1 {
     width: 400px; 
     margin: 0 10px; 
+    
     margin-top: 30px;
     border-radius: 9px;
     transition: transform 0.3s ease-in-out;
 
   }
 
-.image-container img:hover {
+.image-container .img1:hover {
     transform: scale(1.1); 
     margin: 0 25px;
     
@@ -244,7 +251,7 @@ header{
     perspective: 100px;
 }
 
-img{
+.fimage{
     height: 400px;
     width:400px;
     transition: transform 1s;
@@ -303,7 +310,7 @@ img{
       
   }
 
-    img:hover{
+    .fimage:hover{
       transform: scale(1.1);
       
     }
