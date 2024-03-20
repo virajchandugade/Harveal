@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/contactuscss.css">
+    <title>Harveal | Contact us</title>
+</head>
+<body>
+    <iframe src="header.html" frameborder="0" width="100%" height="100%"></iframe>
+    <!-- /header/ -->
+    <div class="container">
+        <div class="column" id="col1">
+            <!-- <div class="col1" alt="Contact Image"></div> -->
+        </div>
+        <div class="column">
+            <h2>Contact Us</h2>
+            <div class="contact-details">
+                <p><i class="fas fa-phone"></i>Phone Number: 123-456-7890</p>
+                <p><i class="fas fa-envelope"></i>Email: info@example.com</p>
+                <p><i class="fas fa-map-marker-alt"></i>Our Office Address: 123 Street, City, Country</p>
+            </div>
+        </div>
+        <div class="column">
+            <label class="ws">Write Us</label>
+            <form class="write-us-form" action="#" method="post">
+                <input type="text" class="inp"  id="name" name="name" placeholder="Your Name" required>
+                <p id="n-error"></p>
+                <input type="email" class="inp" id="email" name="email" placeholder="Your Email" required>
+                <p id="e-error"></p>
+                <textarea name="message" id="message" class="inp" style="resize: none;" rows="4" placeholder="Your Message" required></textarea>
+                <p id="m-error"></p>
+                <input onclick="writeus()" value="Submit">
+            </form>
+        </div>
+    </div>
+    <div id="overlay" class="overlay">
+        <div id="successBanner" class="success-banner">
+            <p id="successMessage"></p>
+            <button onclick="dismissBanner()">Dismiss</button>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-label">Harveal, Your Plant Specialist.</p>
+            <p class="footer-copyright">&#169; 2023 Harveal. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+<script src="/static/js/contactusjs.js"></script>
+</html>

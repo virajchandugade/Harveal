@@ -29,7 +29,7 @@ header {
 .logo {
     width: 120px;
     height: 130px;
-    margin-right: 1px; /* Pushes the logo and Harveal to the left */
+    margin-right: 1px; 
     margin-left: -25px;
 }
 
@@ -212,33 +212,3 @@ h1 {
     transform: translateX(0%);
 }
 
-.footer {
-    background-color: rgb(13, 202, 76);
-    color: white;
-  
-    text-align: center;
-    padding: 20px 0;
-    
-    bottom: 0;
-    width: 100%;
-
-    margin-top: 10vh;
-  }
-  
-  .footer-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .footer-label {
-    font-weight: bold;
-    font-size: 35px;
-    margin-bottom: 10px;
-  }
-  
-  .footer-copyright {
-    font-size: 14px;
-    color: black;
-  }
-  
-  

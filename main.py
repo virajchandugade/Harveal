@@ -80,6 +80,7 @@ collection = db["users"]
 dis_col=db['disease']
 appointdb=db["appointments"]
 admin_collection=db["admin"]
+queries=db["queries"]
 #----------------------------------------------------database-------------------------------------------------------------
 
 #-------------------------------------------------------email-----------------------------------------------------------------
@@ -453,6 +454,13 @@ async def appointment(request: Request,current_user: dict = Depends(get_current_
         return templates.TemplateResponse("Inhome.html", {"request": request})
     else:
          return RedirectResponse(url="/sig_log/")
+#-------------------------------------------contactus-------------------------------------------------------------------
+@app.get("/contactus/", response_class=HTMLResponse)
+async def appointment(request: Request,current_user: dict = Depends(get_current_user)):
+    if current_user:
+        return templates.TemplateResponse("contactus.html", {"request": request})
+    else:
+         return RedirectResponse(url="/sig_log/")
 #---------------------------------------admin(displaying appts)----------------------------------------------------
 
 #---------------------------------------admin login page-------------------------------------------------------------
@@ -588,3 +596,23 @@ async def delete_appointment(hid: str):
             raise HTTPException(status_code=404, detail="Appointment not found")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+#---------------------------------------------contact us submit---------------------------------------------------
+
+class con_sub(BaseModel):
+    name : str
+    email:str
+    message:str
+
+@app.post("/sub_contact/",response_class=HTMLResponse)
+async def submitcontact(request:Request,name:str=Form(...),email:str=Form(...),message:str=Form(...)):
+    
+    subdata={
+        "name":name,
+        "email":email,
+        "date":datetime.now(),
+        "message":message
+    }
+    
+    queries.insert_one(subdata)
+    return {"success"}
