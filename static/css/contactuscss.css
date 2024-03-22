@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    color: white;
+    /* color: white; */
 }
 
 
@@ -37,7 +37,7 @@ body::before {
 .ws{
     display: flex;
     color: white;
-    margin-left: 150px;
+    margin-left: 138px;
     font-weight: bolder;
     font-size: 30px;
 }
@@ -54,7 +54,7 @@ body::before {
     margin-top: 50px;
 }
 .inp{
-    padding: 70px;
+    padding-top: 70px;
 }
 .column {
     flex: 1;
@@ -81,12 +81,12 @@ body::before {
 .write-us-form input[type="email"],
 .write-us-form textarea {
     width: 100%;
-    margin-bottom: 30px;
+    margin-top: 30px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-.write-us-form input[type="submit"] {
+.button-sub {
     background-color: rgb(13, 202, 76);
     color: white;
     border: none;
@@ -95,7 +95,7 @@ body::before {
     margin-left: 140px;
     cursor: pointer;
 }
-.write-us-form input[type="submit"]:hover {
+.button-sub:hover {
     background-color: rgb(9, 136, 52);
 }
 .footer {
@@ -158,4 +158,8 @@ body::before {
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+}
+
+#col2{
+    color: white;
 }

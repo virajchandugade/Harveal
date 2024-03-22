@@ -161,6 +161,10 @@
                             <td>${appointment.houseNumber}, ${appointment.street}, ${appointment.city}, ${appointment.state}, ${appointment.pincode}</td>
                         </tr>
                         <tr>
+                            <th>Timestamp:</th>
+                            <td>${appointment.timestamp}</td>
+                        </tr>
+                        <tr>
                             <td colspan="2">
                                 <button class="cancel-btn" onclick="cancelAppointment('${appointment.hid}')">Cancel</button>
 
@@ -176,22 +180,30 @@
         
             async function cancelAppointment(appointmentId) {
                 try {
+                   
                     const response = await fetch(`/api/appointments/${appointmentId}/delete`, {
                         method: 'POST'
                     });
+
                     if (response.ok) {
                         // Remove the appointment from the UI
                         const appointmentElement = document.querySelector(`.appointment button[data-id="${appointmentId}"]`).closest('.appointment');
                         if (appointmentElement) {
                             appointmentElement.remove();
+
                         }
+                        var rem=document.getElementsByClassName('appointment');
+                        conssole.log(rem)
+                        rem.style.display = "none";
                     } else {
                         console.error('Failed to cancel appointment');
                     }
                 } catch (error) {
                     console.error('Error cancelling appointment:', error);
                 }
+
             }
+
     </script>
 </body>
 </html>

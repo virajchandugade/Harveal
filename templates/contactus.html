@@ -8,30 +8,30 @@
     <title>Harveal | Contact us</title>
 </head>
 <body>
-    <iframe src="header.html" frameborder="0" width="100%" height="100%"></iframe>
+    <iframe src="/header/" frameborder="0" width="100%" height="100%"></iframe>
     <!-- /header/ -->
     <div class="container">
         <div class="column" id="col1">
             <!-- <div class="col1" alt="Contact Image"></div> -->
         </div>
-        <div class="column">
+        <div class="column" id="col2">
             <h2>Contact Us</h2>
             <div class="contact-details">
-                <p><i class="fas fa-phone"></i>Phone Number: 123-456-7890</p>
-                <p><i class="fas fa-envelope"></i>Email: info@example.com</p>
-                <p><i class="fas fa-map-marker-alt"></i>Our Office Address: 123 Street, City, Country</p>
+                <p><i class="fas fa-phone"></i>Phone Number: 785-541-7890</p>
+                <p><i class="fas fa-envelope"></i>Email: harvealsup628@gmail.com</p>
+                <p><i class="fas fa-map-marker-alt"></i>Our Office Address: Kharghar 123 Street, City, India</p>
             </div>
         </div>
-        <div class="column">
+        <div class="column" id="col3">
             <label class="ws">Write Us</label>
-            <form class="write-us-form" action="#" method="post">
+            <form class="write-us-form" method="post">
                 <input type="text" class="inp"  id="name" name="name" placeholder="Your Name" required>
                 <p id="n-error"></p>
                 <input type="email" class="inp" id="email" name="email" placeholder="Your Email" required>
                 <p id="e-error"></p>
                 <textarea name="message" id="message" class="inp" style="resize: none;" rows="4" placeholder="Your Message" required></textarea>
                 <p id="m-error"></p>
-                <input onclick="writeus()" value="Submit">
+                <button type="button" class="button-sub" onclick="writeus()" value="Submit">Submit</button>
             </form>
         </div>
     </div>

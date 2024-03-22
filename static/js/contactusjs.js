@@ -1,83 +1,56 @@
-async function writeus(){
-    var name=document.getElementById("name").value;
-    var email=document.getElementById("email").value;
-    var message=document.getElementById("message").value;
+async function writeus() {
+    var name = document.getElementById("name").value;
+    var email = document.getElementById("email").value;
+    var message = document.getElementById("message").value;
 
-    if (name===''){
-        var er=document.getElementById('n-error');
-        er.textContent="enter your name";
-        er.style.color="red";
-        document.getElementById("name").style.border= "2px solid red";
-        return
-
-    }
-    else {
-        var er=document.getElementById('n-error');
-        er.textContent="";
-        er.style.color="";
-        document.getElementById("name").style.border= "";
-        
+    if (name === '') {
+        document.getElementById('n-error').textContent = "*Enter your name";
+        document.getElementById('n-error').style.color = "red";
+        return;
+    } else {
+        document.getElementById('n-error').textContent = "";
     }
 
-    if (email===''){
-        var er=document.getElementById('e-error');
-        er.textContent="enter your email";
-        er.style.color="red";
-        document.getElementById("email").style.border= "2px solid red";
-        return
-
-    }
-    else {
-        var er=document.getElementById('e-error');
-        er.textContent="";
-        er.style.color="";
-        document.getElementById("email").style.border= "";
-        
+    if (email === '') {
+        document.getElementById('e-error').textContent = "*Enter your email";
+        document.getElementById('e-error').style.color = "red";
+        return;
+    } else {
+        document.getElementById('e-error').textContent = "";
     }
 
-
-    if (message===''){
-        var er=document.getElementById('m-error');
-        er.textContent="message cannot be left blank.";
-        er.style.color="red";
-        document.getElementById("email").style.border= "2px solid red";
-        return
-
-    }
-    else {
-        var er=document.getElementById('e-error');
-        er.textContent="";
-        er.style.color="";
-        document.getElementById("email").style.border= "";
-        
+    if (message === '') {
+        document.getElementById('m-error').textContent = "*Message cannot be left blank.";
+        document.getElementById('m-error').style.color = "red";
+        return;
+    } else {
+        document.getElementById('m-error').textContent = "";
     }
 
-    var formData=new FormData()
-    formData.append('name', name)
-    formData.append('email', email)
-    formData.append('message', message)
+    var formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('message', message);
 
-    try{
-        const response= await fetch('/contactus/',{
-            method:'POST',  
-            body:formData
+    try {
+        const response = await fetch('/sub_contact/', {
+            method: 'POST',
+            body: formData
         });
-        
-        if (response.ok) { 
-            showsentbanner();
-    }
-    else{
-        const err=await response.json();
-        console.log(err);
-        alert("error occured, try after sometime!");
-    }
-    }
-    catch(error){
-        console.log("Error :",error);
-        alert("error occured, try after sometime!");
 
+        if (response.ok) {
+            showsentbanner();
+        } else {
+            const err = await response.json();
+            console.log(err);
+            alert("An error occurred, please try again later!");
+        }
+    } catch (error) {
+        console.log("Error :", error);
+        alert("An error occurred, please try again later!");
     }
 }
+
 
 function showsentbanner() {
     var overlay = document.getElementById("overlay");

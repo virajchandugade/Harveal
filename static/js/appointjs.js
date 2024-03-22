@@ -37,7 +37,7 @@ function googleTranslateElementInit() {
 
 //----------------------------------------------------appointment_submission------------------------------------------------
 
-async function submitForm() {
+async function submitForm() { 
     var hid = document.getElementById("hid").value;
     var fullname = document.getElementById("fullname").value;
     var dob = document.getElementById("dob").value;
@@ -51,7 +51,7 @@ async function submitForm() {
     var state = document.getElementById("state").value;
     var pincode = document.getElementById("pincode").value;
 
-   
+    // var timestamp = new Date().toISOString();
 
     // HARVEAL ID validation
     var hidPattern = /^HARV\d{10}$/;
@@ -129,6 +129,9 @@ async function submitForm() {
     formData.append("city", city);
     formData.append("state", state);
     formData.append("pincode", pincode);
+    // formData.append("timestamp", timestamp);
+
+
 
     try {
         const response = await fetch("/submit_appn/", {

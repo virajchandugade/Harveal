@@ -14,7 +14,7 @@ import random
 from pydantic import BaseModel
 from fastapi import Depends,  HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from datetime import datetime, timedelta
+from datetime import datetime, timezone,timedelta
 from langdetect import detect
 from gtts import gTTS
 import os
@@ -26,7 +26,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
 from bson import ObjectId 
-from pydantic import BaseModel, ValidationError, validator
+from pydantic import BaseModel
 #-----------------------------------------------------------------------------------------------------------------------
 #loading tomato madel---------------------------------------------------------------------------------------------------
 
@@ -58,6 +58,8 @@ class AppointmentFormData(BaseModel):
     city: str
     state: str
     pincode: str
+    timestamp:str
+    
     
 class VAppointmentFormData(BaseModel):
     vfid: str
@@ -270,7 +272,7 @@ async def register(request: Request,phone: str = Form(...), email: str = Form(..
         return{"incorrect otp"}
     else:
         collection.insert_one(user_data)
-        session_id = str(datetime.utcnow().timestamp())
+        session_id = str(datetime.now(timezone.utc).timestamp())
         request.session["user_id"] = Id_user
         print(request.session["user_id"])
   
@@ -461,6 +463,13 @@ async def appointment(request: Request,current_user: dict = Depends(get_current_
         return templates.TemplateResponse("contactus.html", {"request": request})
     else:
          return RedirectResponse(url="/sig_log/")
+#----------------------------------------------------news------------------------------------------------------------------------
+@app.get("/news/", response_class=HTMLResponse)
+async def appointment(request: Request,current_user: dict = Depends(get_current_user)):
+    if current_user:
+        return templates.TemplateResponse("news.html", {"request": request})
+    else:
+         return RedirectResponse(url="/sig_log/")
 #---------------------------------------admin(displaying appts)----------------------------------------------------
 
 #---------------------------------------admin login page-------------------------------------------------------------
@@ -480,8 +489,10 @@ async def submit_appointment(
     city: str = Form(...),
     state: str = Form(...),
     pincode: str = Form(...),
+
 ):
     try:
+      
         # Validate the form data using the Pydantic model
         appointment_data = AppointmentFormData(
             hid=hid,
@@ -496,11 +507,12 @@ async def submit_appointment(
             city=city,
             state=state,
             pincode=pincode,
+            timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
         )
-
-   
+        print(appointment_data.model_dump())
         # Insert the form data into MongoDB
         appointdb.insert_one(appointment_data.model_dump())
+        
         user_data = collection.find_one({"HARV_ID": hid})
         receiver_email = user_data["email"]
         
@@ -604,7 +616,7 @@ class con_sub(BaseModel):
     email:str
     message:str
 
-@app.post("/sub_contact/",response_class=HTMLResponse)
+@app.post("/sub_contact/")
 async def submitcontact(request:Request,name:str=Form(...),email:str=Form(...),message:str=Form(...)):
     
     subdata={
