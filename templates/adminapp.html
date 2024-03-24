@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointments</title>
+    <script src="https://kit.fontawesome.com/86b53df464.js" crossorigin="anonymous"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Quicksand:wght@300&display=swap');
 
@@ -32,11 +33,12 @@
             padding: 15px;
             font-weight: bolder;
         }
-        .appointment {
+        #appointment {
             background-color: rgb(0,0,0,0.8);
             color: white;
             margin-bottom: 10px;
             margin-top: 20px;
+            border-radius: 8px;
             padding: 10px;
             
         }
@@ -51,7 +53,7 @@
         }
 
         .cancel-btn:hover{
-            background-color: rgb(150, 30, 30);
+            background-color: rgb(158, 24, 24);
         }
 
 
@@ -82,6 +84,15 @@
             background-color:rgb(20, 104, 153);
             transform: scale(1.1);
         }
+        .cancel-del{
+            background-color:  rgb(218, 33, 33);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            height: 30px;
+            width: 30px;
+            
+        }
 
 
     </style>
@@ -95,7 +106,7 @@
 
     <div style="text-align: center; margin-top: 20px;">
         <button id="get-appointments-btn" class="get-appointments-btn">Get Appointments</button>
-        <button id="ref" class="ref">refresh</button>
+        <button id="ref" class="ref">Refresh</button>
     </div>
 
     <div id="appointments-container"></div>
@@ -122,7 +133,8 @@
         
                 appointments.forEach(appointment => {
                     const appointmentDiv = document.createElement('div');
-                    appointmentDiv.classList.add('appointment');
+                    //appointmentDiv.classList.add('appointment');
+                    appointmentDiv.setAttribute('id', 'appointment');
         
                     const table = document.createElement('table');
                     table.innerHTML = `
@@ -166,7 +178,9 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <button class="cancel-btn" onclick="cancelAppointment('${appointment.hid}')">Cancel</button>
+                                <button class="cancel-btn" id="cancel-btn" onclick="cancelAppointment('${appointment.hid}')">pending...</button>
+                                <button class="cancel-del" id="cancel-del" onclick="deleteAppointment()"><i class="fa-solid fa-trash fa-xl"></i></button>
+
 
                             </td>
                         </tr>
@@ -179,22 +193,18 @@
            
         
             async function cancelAppointment(appointmentId) {
-                try {
+                try{
                    
                     const response = await fetch(`/api/appointments/${appointmentId}/delete`, {
                         method: 'POST'
                     });
-
+                   
                     if (response.ok) {
                         // Remove the appointment from the UI
-                        const appointmentElement = document.querySelector(`.appointment button[data-id="${appointmentId}"]`).closest('.appointment');
+                        const appointmentElement = document.getElementById('appointment');
                         if (appointmentElement) {
                             appointmentElement.remove();
-
                         }
-                        var rem=document.getElementsByClassName('appointment');
-                        conssole.log(rem)
-                        rem.style.display = "none";
                     } else {
                         console.error('Failed to cancel appointment');
                     }
@@ -202,6 +212,15 @@
                     console.error('Error cancelling appointment:', error);
                 }
 
+            }
+
+
+
+
+            function deleteAppointment(){
+                var rem=document.getElementById('appointment');
+                console.log(rem);
+                rem.style.display = "none";
             }
 
     </script>

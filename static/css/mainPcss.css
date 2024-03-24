@@ -174,13 +174,12 @@ body {
 
 
 #audioContainer audio {
-  width: 100%; /* Set width to fill the container */
-  height: auto; /* Allow height to adjust based on content */
-  margin-top: 10px; /* Add margin for spacing */
+ margin-top: 10px; /* Add margin for spacing */
+ z-index: 1;
 }
 
 #audioContainer audio::-webkit-media-controls-panel {
-  background-color: #333; /* Background color for control panel */
+  
   border-radius: 5px; /* Border radius for control panel */
   padding: 10px; /* Padding for control panel */
 }
@@ -269,6 +268,7 @@ body {
   font-size: 25px;
   color: rgb(49, 250, 116);
 }
+
 
 .footer {
   background-color: rgb(13, 202, 76);

@@ -71,7 +71,7 @@ async function readOutLoud() {
             audioElement.controls = true;
 
             // Append the audio element to the document
-            document.getElementById('audioContainer').innerHTML = '';
+            // document.getElementById('audioContainer').innerHTML = '';
             document.getElementById('audioContainer').appendChild(audioElement);
         } else {
             console.error('Failed to read out loud:', response.statusText);

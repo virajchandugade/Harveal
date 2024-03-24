@@ -148,6 +148,8 @@ async function submitForm() {
         } else {
             const errorData = await response.json();
             console.error(errorData);
+            document.getElementById('submitb').setAttribute('disabled', 'true');
+            alert("you already have one appointment");
             alert("Error submitting form. Please check your inputs and try again.");
         }
     } catch (error) {

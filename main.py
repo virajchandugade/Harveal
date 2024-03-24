@@ -510,15 +510,17 @@ async def submit_appointment(
             timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
         )
         print(appointment_data.model_dump())
-        # Insert the form data into MongoDB
-        appointdb.insert_one(appointment_data.model_dump())
+        ald=appointdb.find_one({"hid": hid})
+        print(ald)
+        if(ald==None):    
+            appointdb.insert_one(appointment_data.model_dump())
+            user_data = collection.find_one({"HARV_ID": hid})
+            receiver_email = user_data["email"]
+            send_appointment_confirmation_email(appointment_data, receiver_email)
+        else:
+            return{"one appointment already booked!"}
         
-        user_data = collection.find_one({"HARV_ID": hid})
-        receiver_email = user_data["email"]
         
-        send_appointment_confirmation_email(appointment_data, receiver_email)
-
-        return {"status": "success", "message": "Form submitted successfully"}
     except Exception as e:
         # Handle other exceptions
         print(f"Error: {str(e)}")
@@ -604,6 +606,8 @@ async def delete_appointment(hid: str):
         
         if result.deleted_count == 1:
             return {"message": "Appointment deleted successfully"}
+
+        
         else:
             raise HTTPException(status_code=404, detail="Appointment not found")
     except Exception as e:
