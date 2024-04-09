@@ -149,6 +149,11 @@ otp_user = random.randint(10000, 99999)
 async def send_otp(data: OtpRequest):
     email = data.email  
     
+    
+    existing_user = db.users.find_one({"email": email})
+    if existing_user:
+        return JSONResponse({"error": "User already exists"}, status_code=400)
+    
     try:
         send_mail(email, otp_user)
         return {"message": "OTP sent successfully!"}
@@ -223,19 +228,74 @@ def log_send_mail(log_user,log_otp_user):
     
     msg['Subject'] = f"login to Harveal: otp:{log_otp_user}"
         
-    welcome_message = f"""
-    Dear {log_user},
+    welcome_message =  f"""
+<html>
+  <head>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Quicksand:wght@300&display=swap');
+       body {{  
+       font-family: 'Didact Gothic', sans-serif;
+    }}
+      .header {{
+        background-color: rgb(13, 202, 76);
+        text-align: center
+        padding: 25px;
+      }}
+      .logo {{
+        width: 150px; /* Adjust the size as needed */
+        height: auto;
+      }}
+      .headname {{
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+      }}
+      .footer {{
+  background-color: rgb(13, 202, 76);
+  color: white;
 
-    Use this otp to login:{log_otp_user}
+  text-align: center;
+  padding: 20px 0;
+  
+  bottom: 0;
+  width: 100%;
+}}
 
-    Thank you for choosing Harveal. We look forward to being a part of your journey.
+.footer-content {{
+  display: flex;
+  flex-direction: column;
+}}
 
-    Best regards,
+.footer-label {{
+  font-weight: bold;
+  font-size: 35px;
+  margin-bottom: 10px;
+}}
 
-    The Harveal Team.
-    
-    """
-    msg.attach(MIMEText(welcome_message, 'plain'))
+.footer-copyright {{
+  font-size: 14px;
+  color: black;
+}}
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <label for="" class="headname"><strong>Harveal</strong></label>
+    </div>
+    <p>Dear {log_user},</p>
+    <p>Use this OTP to login: <strong>{log_otp_user}</strong></p>
+    <p>Thank you for choosing Harveal. We look forward to being a part of your journey.</p>
+    <p>Best regards,<br/>The Harveal Team.</p>
+     <footer class="footer">
+          <div class="footer-content">
+              <p class="footer-label">Harveal, Your Plant Specialist.</p>
+              <p class="footer-copyright">&#169; 2023 Harveal. All rights reserved.</p>
+          </div>
+      </footer>
+  </body>
+</html>
+"""
+    msg.attach(MIMEText(welcome_message, 'html'))
         
         #SMTP server
     try:
@@ -266,10 +326,10 @@ async def register(request: Request,phone: str = Form(...), email: str = Form(..
     }       
     find=db.users.find_one({"email": email})
     print(find)
-    if (email==find):
-        return {"user already exist"} 
+    if find:
+        return JSONResponse({"error": "User already exists"}, status_code=400)
     elif (otp != otp_user):
-        return{"incorrect otp"}
+        return JSONResponse({"error": "Incorrect OTP"}, status_code=400)
     else:
         collection.insert_one(user_data)
         session_id = str(datetime.now(timezone.utc).timestamp())
@@ -309,8 +369,12 @@ class LogOtpRequest(BaseModel):
 @app.post("/send_log_otp/") 
 async def send_log_otp(lgdata:LogOtpRequest):
     log_ID = get_user_by_id(lgdata.uid)
+    
+    if log_ID is None:
+        raise HTTPException(status_code=404, detail="User not found") 
     print(log_ID)
     print(log_ID["email"])
+    
     v=log_ID["email"]
     log_send_mail(v, log_otp_user)
      
@@ -396,7 +460,7 @@ async def prediction(file: UploadFile = File(...),plant_type: str = Form(...)):
     if plant_type == 'Pumpkin':
         print(plant_type)
         model_path = 'pumpkin_model.keras'
-        class_labels = ['Alt_cucu', 'Alt_b', 'Aphid', 'ArmW', 'Bact_LS', 'Bact_wilt', 'Cucum_beet', 'Flee_beet', 'Fusa', 'Gum_stem', 'Phy_bli', 'Sqau_bg', 'Thirps', 'Hlty_corn']
+        class_labels = ['Alt_cucu', 'Alt_b', 'Aphid', 'ArmW', 'Bact_LS', 'Bact_wilt', 'Cucum_beet', 'Flee_beet', 'Fusa', 'Gum_stem', 'Phy_bli', 'Sqau_bg', 'Sq_vb','Thirps', 'Hlty_pump']
     elif plant_type == 'Tomato':
         model_path = 'tomato_model.keras'
         class_labels = ['Bacspot', 'Eblight', 'LateB', 'LeafM', 'septLeaf', 'SpidM', 'TarSpot', 'YellowLeaf', 'ToMV', 'Hlty']
@@ -512,15 +576,14 @@ async def submit_appointment(
         print(appointment_data.model_dump())
         ald=appointdb.find_one({"hid": hid})
         print(ald)
+        if ald:
+            raise HTTPException(status_code=400, detail="Already booked a appointment!") 
+        
         if(ald==None):    
             appointdb.insert_one(appointment_data.model_dump())
             user_data = collection.find_one({"HARV_ID": hid})
             receiver_email = user_data["email"]
             send_appointment_confirmation_email(appointment_data, receiver_email)
-        else:
-            return{"one appointment already booked!"}
-        
-        
     except Exception as e:
         # Handle other exceptions
         print(f"Error: {str(e)}")
@@ -632,3 +695,4 @@ async def submitcontact(request:Request,name:str=Form(...),email:str=Form(...),m
     
     queries.insert_one(subdata)
     return {"success"}
+

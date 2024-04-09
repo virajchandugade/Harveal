@@ -149,12 +149,18 @@ async function submitForm() {
             const errorData = await response.json();
             console.error(errorData);
             document.getElementById('submitb').setAttribute('disabled', 'true');
-            alert("you already have one appointment");
-            alert("Error submitting form. Please check your inputs and try again.");
-        }
-    } catch (error) {
+
+            if (errorData.status === 404) {
+                alert("you already have one booked appointment");
+              } else {
+                alert(errorData.error); // Alert other errors
+              }
+              
+            }
+    } 
+    
+    catch (error) {
         console.error("An unexpected error occurred:", error);
-        alert("An unexpected error occurred. Please try again.");
     }
 }
 //----------------------------------------------------------successmessage--------------------------------------------

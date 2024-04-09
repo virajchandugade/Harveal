@@ -45,7 +45,7 @@ header{
 
 .navlist ul{
     
-    margin-left: 200px;
+    margin-left: 300px;
 }
 
 .navlist li,a{
@@ -54,6 +54,18 @@ header{
     color: white;
     font-size: 20px;
     text-decoration: none;
+    transition: transform 0.3s ease-in-out;
+
+}
+
+.navlist a:hover{
+  background-color: rgb(40, 231, 104);
+  border-radius: 5px;
+  text-decoration:solid;
+  padding: 0.8px;
+  color:rgb(7, 148, 54);  
+  transform: scale(1.1);
+
 }
 
 

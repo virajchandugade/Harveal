@@ -1,3 +1,8 @@
+
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+  }
+
 async function translateText() {
     try {
         const textInput = document.getElementById('textInput').innerText  ;

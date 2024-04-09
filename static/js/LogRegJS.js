@@ -43,6 +43,7 @@ function enableSubmit() {
 // mode: 'cors',
 
 async function sendOtp() {
+
   try {
     // Get the email value from the input field
     const email = document.getElementById('email').value;
@@ -58,15 +59,20 @@ async function sendOtp() {
 
     // Check if the request was successful
     if (response.ok) {
-      // If successful, enable the OTP input field
-      // Enable the Submit button
       
       alert('OTP Sent!');
       document.getElementById('otp').removeAttribute('disabled');
       enableSubmit();
-    } else {
-      // If not successful, handle the error (e.g., display an error message)
-      console.error('Failed to send OTP:', response.statusText);
+    } 
+    else {
+      const data = await response.json();
+      // Check if the error message indicates that the user already exists
+      if (data.error === "User already exists") {
+        alert('User already exists');
+      } else {
+        alert(data.error); // Alert other errors
+      }
+      
     }
   } catch (error) {
     console.error('Error sending OTP:', error);
@@ -113,14 +119,18 @@ async function sendLogOtp() {
 
     // Check if the request was successful
     if (logresponse.ok) {
-      // If successful, enable the OTP input field
-      // Enable the Submit button
+      
       
       alert('OTP Sent!');
       document.getElementById('logOTP').removeAttribute('disabled');
       enableLogSubmit();
-    } else {
-      // If not successful, handle the error (e.g., display an error message)
+    } 
+    else if (logresponse.status === 404) {
+      alert('User not found');
+    }
+    
+    else {
+     
       console.error('Failed to send OTP:', logresponse.statusText);
 
     }
