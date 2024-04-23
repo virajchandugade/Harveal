@@ -41,9 +41,9 @@ from pydantic import BaseModel
 class OtpRequest(BaseModel):
     email: str
 #--------------------------------------------------------------for appointment submission data--------------------------
-from typing import List
+
 from pydantic import BaseModel
-from datetime import date
+
 
 class AppointmentFormData(BaseModel):
     hid: str
@@ -232,10 +232,6 @@ def log_send_mail(log_user,log_otp_user):
 <html>
   <head>
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Quicksand:wght@300&display=swap');
-       body {{  
-       font-family: 'Didact Gothic', sans-serif;
-    }}
       .header {{
         background-color: rgb(13, 202, 76);
         text-align: center
