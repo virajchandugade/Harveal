@@ -1,6 +1,6 @@
-🌾 Harveal
+🌾 Harveal-Dedicated to plant health.
 
-Dedicated to plant health.
+----------------------------------------------------------------------------------------------------------------
 
 🧭 Overview
 
