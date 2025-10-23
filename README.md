@@ -6,8 +6,8 @@
 
 Harveal is an intelligent web application designed specifically for Indian farmers to help them diagnose plant diseases by simply uploading an image of their infected crops.
 The app leverages deep learning models to identify the disease, provide scientific details, and suggest preventive measures.
-
 In addition, Harveal offers a complete ecosystem for farmers to stay informed and connected with experts and agricultural updates.
+
 ----------------------------------------------------------------------------------------------------------
 
 . Key Features
@@ -44,7 +44,6 @@ How to run?
 . Install dependencies: pip install -r requirements.txt
 . Run the application: python app.py
 . Sign up:
-
 -On first use, sign up using your email.
 
 -You’ll receive a unique user ID via email.
