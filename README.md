@@ -26,17 +26,21 @@ The app supports multiple Indian languages and provides audio playback of diagno
 
 🧑‍💼 Admin Dashboard
 Admins can manage all incoming appointments and user interactions directly from the admin panel.
+
 ----------------------------------------------------------------------------------------------------------
 
 Tech Stack:
 
-Frontend:	HTML, CSS, JavaScript
-Backend Framework:	FastAPI, Uvicorn
-Database: MongoDB
-ML: TensorFlow, Keras, Pillow, SciPy
+.Frontend:	HTML, CSS, JavaScript
+.Backend Framework:	FastAPI, Uvicorn
+.Database: MongoDB
+.ML: TensorFlow, Keras, Pillow, SciPy
+
+
 ----------------------------------------------------------------------------------------------------------
 
 How to run?
+
 . Install dependencies: pip install -r requirements.txt
 . Run the application: python app.py
 . Sign up:
@@ -51,7 +55,7 @@ How to run?
 
 ----------------------------------------------------------------------------------------------------------
 
-Future Improvements
+Future Improvements:
 
 . Adding more regional crop types and disease datasets
 
